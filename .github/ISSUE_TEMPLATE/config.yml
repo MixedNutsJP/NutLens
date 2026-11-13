@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: セキュリティの問題 / Security issue
+    url: https://github.com/MixedNutsJP/NutLens/security/advisories/new
+    about: 公開の Issue ではなく、非公開で報告してください / Please report privately, not in a public issue
+  - name: 設計と決定の記録 / Design and decision records
+    url: https://github.com/MixedNutsJP/NutLens/blob/main/docs/adr/README.md
+    about: なぜそう作ったか、何を確かめていないか / Why it is built this way, and what has not been checked

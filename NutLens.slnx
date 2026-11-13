@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/NutLens.Analysis/NutLens.Analysis.csproj" />
+    <Project Path="src/NutLens.App/NutLens.App.csproj" />
+    <Project Path="src/NutLens.Capture/NutLens.Capture.csproj" />
+    <Project Path="src/NutLens.Core/NutLens.Core.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/NutLens.Core.Tests/NutLens.Core.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/NutLens.CaptureProbe/NutLens.CaptureProbe.csproj" />
+  </Folder>
+</Solution>

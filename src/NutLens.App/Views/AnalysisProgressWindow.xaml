@@ -1,0 +1,33 @@
+<Window x:Class="NutLens.App.Views.AnalysisProgressWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:res="clr-namespace:NutLens.App.Resources"
+        Title="{x:Static res:Strings.AnalysisWindowTitle}"
+        Width="460"
+        SizeToContent="Height"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner"
+        FontSize="13">
+
+    <StackPanel Margin="20">
+        <TextBlock x:Name="ElapsedText" FontSize="15" FontWeight="SemiBold" />
+
+        <!--
+            進捗は「動いている」ことだけを示す。
+            出力形式 json は最後にまとめて返るので、何ターン目かは出せない。
+            出せないものを出すふりをしない（詳細設計 03 §9.2）。
+        -->
+        <ProgressBar IsIndeterminate="True" Height="6" Margin="0,14,0,0" />
+
+        <TextBlock Text="{x:Static res:Strings.AnalysisRunningHint}"
+                   TextWrapping="Wrap"
+                   Margin="0,14,0,0"
+                   Opacity="0.8" />
+
+        <Button Content="{x:Static res:Strings.Cancel}"
+                Click="OnCancelClick"
+                HorizontalAlignment="Right"
+                Padding="14,6"
+                Margin="0,18,0,0" />
+    </StackPanel>
+</Window>

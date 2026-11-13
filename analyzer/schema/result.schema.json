@@ -1,0 +1,75 @@
+{
+  "title": "NutLens 解析結果",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["candidates", "observed_features", "unverified_points", "search_queries_used"],
+  "properties": {
+    "candidates": {
+      "description": "候補。確信度の高い順。立たなければ空の配列にする。",
+      "type": "array",
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["type", "confidence", "evidence", "mismatches", "sources"],
+        "properties": {
+          "title_ja": {
+            "description": "邦題。日本未公開などで存在しない場合は省略する。無いものを作らない。",
+            "type": "string"
+          },
+          "title_original": {
+            "description": "原題。",
+            "type": "string"
+          },
+          "year": {
+            "description": "公開年。確認できない場合は省略する。",
+            "type": "integer",
+            "minimum": 1880,
+            "maximum": 2100
+          },
+          "type": {
+            "description": "作品の種別。",
+            "type": "string",
+            "enum": ["movie", "tv", "short", "unknown"]
+          },
+          "confidence": {
+            "description": "確信度。合わない点があるなら下げる。",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "evidence": {
+            "description": "観察した特徴とソースが一致した点。",
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "mismatches": {
+            "description": "観察した特徴と合わなかった点。空にするために省略しない。",
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "sources": {
+            "description": "実際に中身を確かめた参考 URL。",
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "observed_features": {
+      "description": "フレームから観察した事実。推測を混ぜない。",
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "unverified_points": {
+      "description": "ソースで確認できなかった点。",
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "search_queries_used": {
+      "description": "実際に使った検索語。英語と日本語の両方。",
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

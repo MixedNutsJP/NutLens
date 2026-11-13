@@ -1,0 +1,72 @@
+<Window x:Class="NutLens.App.Views.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:res="clr-namespace:NutLens.App.Resources"
+        Title="{x:Static res:Strings.AboutWindowTitle}"
+        Width="700"
+        Height="600"
+        MinWidth="520"
+        MinHeight="420"
+        WindowStartupLocation="CenterOwner"
+        FontSize="13">
+
+    <Window.Resources>
+        <!--
+            ライセンス文は選択してコピーできる必要がある。
+            MIT は「著作権表示とライセンス文を残す」ことを条件にしているので、
+            **読むだけで写せない表示にしない。**
+        -->
+        <Style TargetType="TextBox" x:Key="ReadOnlyText">
+            <Setter Property="IsReadOnly" Value="True" />
+            <Setter Property="IsReadOnlyCaretVisible" Value="False" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+            <Setter Property="Padding" Value="4" />
+        </Style>
+
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="12,5" />
+            <Setter Property="Margin" Value="0,0,8,0" />
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="0,0,0,12">
+            <TextBlock Text="{x:Static res:Strings.AppTitle}" FontSize="22" FontWeight="SemiBold" />
+            <TextBlock Text="{Binding VersionText}" Opacity="0.75" Margin="0,2,0,0" />
+            <TextBlock Text="{Binding Copyright}" Opacity="0.75" Margin="0,2,0,0" />
+            <TextBlock Text="{x:Static res:Strings.AboutSummary}" TextWrapping="Wrap" Margin="0,10,0,0" />
+        </StackPanel>
+
+        <TabControl Grid.Row="1">
+            <TabItem Header="{x:Static res:Strings.AboutTabNotice}">
+                <TextBox Text="{x:Static res:Strings.AboutUsageNotice}" Style="{StaticResource ReadOnlyText}" />
+            </TabItem>
+
+            <TabItem Header="{x:Static res:Strings.AboutTabLicense}">
+                <TextBox Text="{Binding LicenseText, Mode=OneWay}"
+                         Style="{StaticResource ReadOnlyText}"
+                         FontFamily="Consolas, Meiryo, monospace" />
+            </TabItem>
+
+            <TabItem Header="{x:Static res:Strings.AboutTabThirdParty}">
+                <TextBox Text="{Binding ThirdPartyText, Mode=OneWay}"
+                         Style="{StaticResource ReadOnlyText}"
+                         FontFamily="Consolas, Meiryo, monospace" />
+            </TabItem>
+        </TabControl>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
+            <Button Content="{x:Static res:Strings.AboutOpenRepository}" Click="OnOpenRepositoryClick" />
+            <Button Content="{x:Static res:Strings.Close}" IsCancel="True" IsDefault="True" Margin="0" />
+        </StackPanel>
+    </Grid>
+</Window>

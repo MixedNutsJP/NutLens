@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    ADR-0002 決定 1：Core と同じく -windows を付けない。
+    グラフィックスデバイスも音声デバイスも無い環境（CI）でテストを回せる状態を保つ。
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>NutLens.Core.Tests</RootNamespace>
+    <AssemblyName>NutLens.Core.Tests</AssemblyName>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <OutputType>Exe</OutputType>
+    <!--
+      .NET 10 SDK の `dotnet test` は VSTest ではなく Microsoft.Testing.Platform を使う。
+      このプロパティが無いと「Testing with VSTest target is no longer supported」で失敗する。
+    -->
+    <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- xunit.v3 は Microsoft.Testing.Platform に対応しているので VSTest アダプタは要らない -->
+    <PackageReference Include="xunit.v3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\NutLens.Core\NutLens.Core.csproj" />
+    <!-- NutLens.Analysis は net10.0（Windows 非依存）なのでテストから参照できる -->
+    <ProjectReference Include="..\..\src\NutLens.Analysis\NutLens.Analysis.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,69 @@
+# ビルド出力
+# **WPF のビルドが作る一時プロジェクト。** 中に `C:\Users\<名前>\.nuget\…` が
+# 絶対パスで並ぶので、入れると利用者名がリポジトリに載る。実際に 1 度載りかけた。
+*_wpftmp.csproj
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+artifacts/
+publish/
+
+# Visual Studio / Rider / VS Code
+.vs/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.DotSettings.user
+.vscode/*
+!.vscode/extensions.json
+
+# テスト結果
+TestResults/
+*.trx
+*.coverage
+coverage*.json
+coverage*.xml
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+.nuget/
+
+# Velopack（段階 5）
+Releases/
+vpk-temp/
+
+# 一時データ・秘密情報（D-14：リポジトリに秘密情報を置かない）
+work/
+*.pfx
+*.snk
+*.pem
+*.key
+*.p12
+secrets.json
+.env
+.env.*
+appsettings.*.local.json
+
+# Whisper のモデル（同梱しない。D-04）
+# モデルの本来の置き場はデータルート（リポジトリの外）。ここは手元に持ち込んだときの保険。
+*.bin
+# **先頭の / が要る。** Windows は core.ignorecase=true なので、`models/` と書くと
+# 将来 `src/…/Models/` を足したときに**黙って除外される。**
+/models/
+
+# OS
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# 段階 5：配布の成果物（ADR-0031 決定 1）
+# **リリースの成果物は GitHub Actions でしか作らない。**
+# 手元の vpk pack は動作確認のためだけなので、リポジトリには置かない。
+publish/
+dist/
+release/

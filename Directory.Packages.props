@@ -1,0 +1,55 @@
+<Project>
+
+  <!--
+    NuGet のバージョンを一元管理する（CLAUDE.md §4.4）。
+    新しい依存を足すときは、先にライセンスを確認すること（D-06）。
+    使用中のライセンスは段階 5 で THIRD_PARTY_NOTICES.md にまとめる。
+  -->
+
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+  </PropertyGroup>
+
+  <ItemGroup Label="段階 1：キャプチャ">
+    <!--
+      Vortice.Direct3D11 / Vortice.DXGI は ADR-0003 で CsWin32 + SoftwareBitmap に
+      置き換えたので、**参照していない**。THIRD_PARTY_NOTICES.md にも載せない（D-06）。
+    -->
+    <!-- Win32 P/Invoke の生成（MIT）。手書きしない -->
+    <PackageVersion Include="Microsoft.Windows.CsWin32" Version="0.3.371" />
+    <!-- 合成ルート（MIT） -->
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.15" />
+  </ItemGroup>
+
+  <ItemGroup Label="段階 3：音声・OCR">
+    <!-- WASAPI ループバック録音（MIT）。ADR-0016 -->
+    <PackageVersion Include="NAudio" Version="3.3.0" />
+    <!-- ローカル文字起こし（MIT）。ADR-0017。native は Runtime 側に同梱される -->
+    <PackageVersion Include="Whisper.net" Version="1.9.1" />
+    <PackageVersion Include="Whisper.net.Runtime" Version="1.9.1" />
+  </ItemGroup>
+
+  <ItemGroup Label="段階 4：使い勝手">
+    <!--
+      タスクトレイ（MIT）。ADR-0009。
+      Hardcodet 版は CPOL 1.02 で OSI 承認ではないため採らない。
+    -->
+    <PackageVersion Include="H.NotifyIcon.Wpf" Version="2.4.1" />
+  </ItemGroup>
+
+  <ItemGroup Label="段階 5：配布">
+    <!--
+      インストーラーと自動更新（MIT）。ADR-0027。
+      nuspec の license は expression="MIT" を確認済み。
+    -->
+    <PackageVersion Include="Velopack" Version="1.2.161" />
+  </ItemGroup>
+
+  <ItemGroup Label="テスト">
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.12.0" />
+    <PackageVersion Include="xunit.v3" Version="4.0.3" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="4.0.1" />
+  </ItemGroup>
+
+</Project>

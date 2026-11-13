@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    ADR-0002: 抽象と純ロジックの層。
+    TFM に -windows を付けないことで、Windows 専用 API を書いた瞬間にビルドが落ちる。
+    規約を人の注意力ではなくコンパイラに守らせるための構成であり、意図的なもの。
+    NuGet 依存はゼロ。
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>NutLens.Core</RootNamespace>
+    <AssemblyName>NutLens.Core</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- 内部のヘルパ（ファイル名から経過秒を読む等）をテストで固定するため -->
+    <InternalsVisibleTo Include="NutLens.Core.Tests" />
+  </ItemGroup>
+
+</Project>

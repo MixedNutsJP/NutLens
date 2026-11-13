@@ -1,0 +1,151 @@
+<Window x:Class="NutLens.App.Views.SetupWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:res="clr-namespace:NutLens.App.Resources"
+        Title="{x:Static res:Strings.SetupWindowTitle}"
+        Width="720"
+        Height="680"
+        MinWidth="560"
+        MinHeight="520"
+        WindowStartupLocation="CenterScreen"
+        FontSize="13">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+
+        <Style TargetType="TextBlock" x:Key="SectionHeader">
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Margin" Value="0,16,0,6" />
+        </Style>
+
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="12,5" />
+            <Setter Property="Margin" Value="0,0,8,0" />
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+
+                <!-- D-07：利用枠と送信内容を初回セットアップに明記する -->
+                <TextBlock Text="{x:Static res:Strings.SetupNoticeHeader}" Style="{StaticResource SectionHeader}" Margin="0,0,0,6" />
+                <Border BorderBrush="#33808080" BorderThickness="1" CornerRadius="4" Padding="12">
+                    <TextBox Text="{x:Static res:Strings.SetupNotice}"
+                             IsReadOnly="True"
+                             IsReadOnlyCaretVisible="False"
+                             BorderThickness="0"
+                             Background="Transparent"
+                             TextWrapping="Wrap"
+                             VerticalScrollBarVisibility="Disabled"
+                             HorizontalScrollBarVisibility="Disabled" />
+                </Border>
+
+                <!-- D-03：足りないものを確認して案内する -->
+                <TextBlock Text="{x:Static res:Strings.SetupChecksHeader}" Style="{StaticResource SectionHeader}" />
+                <ItemsControl ItemsSource="{Binding Checks}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <DockPanel Margin="0,5">
+                                <!--
+                                    ○ や □ を使わない。ラジオボタン・チェックボックスに見え、
+                                    押して入力するものだと誤解される（利用者からの指摘）。
+                                    Segoe UI Emoji を指定しないと白黒の字形で描かれる。
+                                -->
+                                <TextBlock Text="{Binding Mark}"
+                                           DockPanel.Dock="Left"
+                                           Width="28"
+                                           FontFamily="Segoe UI Emoji"
+                                           VerticalAlignment="Top" />
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Label}" FontWeight="SemiBold" />
+                                    <TextBlock Text="{Binding Detail}"
+                                               TextWrapping="Wrap"
+                                               Opacity="0.8"
+                                               Visibility="{Binding HasDetail, Converter={StaticResource BoolToVisibility}}" />
+                                </StackPanel>
+                            </DockPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                    <!--
+                        ADR-0029 決定 1：**押したときだけ**利用枠を使う。
+                        ボタンの文面にそう書いてある。
+                    -->
+                    <Button Content="{x:Static res:Strings.SetupCheckClaudeUsableButton}"
+                            Command="{Binding CheckClaudeUsableCommand}" />
+                    <Button Content="{x:Static res:Strings.SetupRecheck}" Command="{Binding RecheckCommand}" />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                    <Button Content="{x:Static res:Strings.SetupOpenClaudeDocs}" Click="OnOpenClaudeDocsClick" />
+                    <Button Content="{x:Static res:Strings.SetupOpenLanguageSettings}" Click="OnOpenLanguageSettingsClick" />
+                </StackPanel>
+
+                <!-- D-04：モデルは同梱せず、ここで選んで落とす -->
+                <TextBlock Text="{x:Static res:Strings.ModelSectionHeader}" Style="{StaticResource SectionHeader}" />
+                <TextBlock Text="{x:Static res:Strings.ModelNotice}" TextWrapping="Wrap" Opacity="0.8" />
+
+                <!--
+                    一覧から選ぶ（ADR-0034 決定 5）。
+                    6 つあるので、折りたたんだ選択肢だと**違いを読めないまま選ぶ**ことになる。
+                    印にチェックボックス・ラジオボタンを使わない（押して入力する部品に見えるため）。
+                -->
+                <ListBox ItemsSource="{Binding Models}"
+                         SelectedItem="{Binding SelectedModel}"
+                         HorizontalContentAlignment="Stretch"
+                         Margin="0,8,0,0"
+                         MaxHeight="230">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="0,4">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Name}" FontWeight="SemiBold" />
+                                    <TextBlock Text="{Binding Size}" Opacity="0.75" Margin="10,0,0,0" />
+                                    <Border Background="#332E7D32"
+                                            CornerRadius="3"
+                                            Padding="6,1"
+                                            Margin="10,0,0,0"
+                                            Visibility="{Binding IsRecommended, Converter={StaticResource BoolToVisibility}}">
+                                        <TextBlock Text="{Binding RecommendedLabel}" FontWeight="SemiBold" />
+                                    </Border>
+                                </StackPanel>
+                                <TextBlock Text="{Binding Description}" TextWrapping="Wrap" Opacity="0.8" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                    <Button Content="{x:Static res:Strings.ModelDownload}" Command="{Binding DownloadModelCommand}" />
+                    <Button Content="{x:Static res:Strings.ModelCancel}" Command="{Binding CancelDownloadCommand}" />
+                </StackPanel>
+
+                <ProgressBar Height="6"
+                             Margin="0,10,0,0"
+                             Minimum="0"
+                             Maximum="1"
+                             Value="{Binding DownloadRatio, Mode=OneWay}"
+                             Visibility="{Binding IsDownloading, Converter={StaticResource BoolToVisibility}}" />
+                <TextBlock Text="{Binding DownloadStatus}" TextWrapping="Wrap" Margin="0,6,0,0" Opacity="0.85" />
+            </StackPanel>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
+            <!--
+                中止できるようにする（利用者からの指摘）。
+                × と同じ経路を通すため、ここでは閉じるだけ。確認は OnClosing が 1 箇所で行う。
+            -->
+            <Button Content="{x:Static res:Strings.SetupCancel}" IsCancel="True" Click="OnCancelClick" />
+            <Button Content="{x:Static res:Strings.SetupStart}" IsDefault="True" Click="OnStartClick" FontWeight="SemiBold" Margin="0" />
+        </StackPanel>
+    </Grid>
+</Window>

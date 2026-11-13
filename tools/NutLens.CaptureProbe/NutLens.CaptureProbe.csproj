@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    段階 1 の動作確認用。GUI を触らずにキャプチャ経路を一通り通して結果を出す。
+    製品には含めない（配布物のパッケージ対象外）。
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows10.0.22621.0</TargetFramework>
+    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>NutLens.CaptureProbe</RootNamespace>
+    <UseWPF>true</UseWPF>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <!-- 解析の通し確認で analyzer/ が要る（本体と同じ配置にする） -->
+  <ItemGroup>
+    <Content Include="..\..\analyzer\**\*.*" LinkBase="analyzer" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\NutLens.Core\NutLens.Core.csproj" />
+    <ProjectReference Include="..\..\src\NutLens.Capture\NutLens.Capture.csproj" />
+    <ProjectReference Include="..\..\src\NutLens.Analysis\NutLens.Analysis.csproj" />
+  </ItemGroup>
+
+</Project>

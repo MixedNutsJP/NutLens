@@ -1,0 +1,826 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <data name="AppTitle" xml:space="preserve">
+    <value>NutLens</value>
+  </data>
+
+  <data name="TargetSectionHeader" xml:space="preserve">
+    <value>1. 撮影する対象</value>
+  </data>
+  <data name="TargetKindWindow" xml:space="preserve">
+    <value>ウィンドウ</value>
+  </data>
+  <data name="TargetKindMonitor" xml:space="preserve">
+    <value>モニタ全体</value>
+  </data>
+  <data name="TargetKindRegion" xml:space="preserve">
+    <value>画面の一部</value>
+  </data>
+  <data name="RefreshTargets" xml:space="preserve">
+    <value>一覧を更新</value>
+  </data>
+  <data name="SelectRegion" xml:space="preserve">
+    <value>キャプチャ範囲を選択する…</value>
+  </data>
+  <data name="RegionNotSelected" xml:space="preserve">
+    <value>未選択</value>
+  </data>
+  <data name="RegionSelectedFormat" xml:space="preserve">
+    <value>選択中: {0} × {1} （位置 {2}, {3}）</value>
+  </data>
+  <data name="RegionOverlayHint" xml:space="preserve">
+    <value>撮影したい範囲をドラッグしてください（Esc で中止）</value>
+  </data>
+  <data name="FramingHint" xml:space="preserve">
+    <value>ヒント：動画が表示されている部分だけを「画面の一部」で選ぶと、重複の除去と解析の精度が上がります。ブラウザの窓ごと撮ると、タブやサイドバーなど動かない部分が画面の大半を占めてしまいます。</value>
+  </data>
+
+  <data name="SettingsSectionHeader" xml:space="preserve">
+    <value>2. 撮影の条件</value>
+  </data>
+  <data name="IntervalSeconds" xml:space="preserve">
+    <value>撮影間隔（秒）</value>
+  </data>
+  <data name="DurationSeconds" xml:space="preserve">
+    <value>撮影時間（秒）</value>
+  </data>
+  <data name="DuplicateThreshold" xml:space="preserve">
+    <value>重複とみなす距離</value>
+  </data>
+  <data name="MaxFrames" xml:space="preserve">
+    <value>保存する最大枚数</value>
+  </data>
+  <data name="LongEdgePixels" xml:space="preserve">
+    <value>縮小後の長辺（px）</value>
+  </data>
+  <data name="RecordAudio" xml:space="preserve">
+    <value>音声を録る（文字起こしに使います）</value>
+  </data>
+  <data name="AudioNotice" xml:space="preserve">
+    <value>録音はシステム全体の音を拾います。通知音や他のアプリの音も入ります。</value>
+  </data>
+  <data name="WarningsHeader" xml:space="preserve">
+    <value>できなかったこと</value>
+  </data>
+  <data name="WarningAudioFormat" xml:space="preserve">
+    <value>音声を録音できませんでした（{0}）。文字起こしは行いません。</value>
+  </data>
+  <data name="WarningMediaCancelled" xml:space="preserve">
+    <value>文字起こしとテロップの読み取りを中止しました。</value>
+  </data>
+
+  <data name="RunSectionHeader" xml:space="preserve">
+    <value>3. 撮影</value>
+  </data>
+  <data name="StartCapture" xml:space="preserve">
+    <value>撮影を開始</value>
+  </data>
+  <data name="StopCapture" xml:space="preserve">
+    <value>停止</value>
+  </data>
+  <data name="OpenFolder" xml:space="preserve">
+    <value>保存先を開く</value>
+  </data>
+  <data name="StatusIdle" xml:space="preserve">
+    <value>待機中</value>
+  </data>
+  <data name="StatusCapturingFormat" xml:space="preserve">
+    <value>撮影中 — 経過 {0:0.0} 秒 / 受信 {1} 枚 / 採用 {2} 枚</value>
+  </data>
+  <data name="StatusDoneFormat" xml:space="preserve">
+    <value>完了 — {0} 枚を保存しました（受信 {1} 枚、経過 {2:0.0} 秒）</value>
+  </data>
+  <data name="StatusStoppedFormat" xml:space="preserve">
+    <value>停止しました — {0} 枚を保存しました（受信 {1} 枚）</value>
+  </data>
+  <data name="StatusNoFrames" xml:space="preserve">
+    <value>フレームを 1 枚も取得できませんでした。対象が更新されているか確認してください。</value>
+  </data>
+
+  <data name="PrivacyNotice" xml:space="preserve">
+    <value>撮影した画像は一時データです。解析が終わるか、次の撮影を始めるか、このウィンドウを閉じるか、アプリを終了すると自動的に削除されます。</value>
+  </data>
+  <data name="KeepTemporaryDataWarning" xml:space="preserve">
+    <value>【デバッグ設定が有効】一時データを自動削除しません。</value>
+  </data>
+
+  <data name="ErrorTitle" xml:space="preserve">
+    <value>エラー</value>
+  </data>
+  <data name="ErrorNoTarget" xml:space="preserve">
+    <value>撮影する対象を選んでください。</value>
+  </data>
+  <data name="ErrorNoRegion" xml:space="preserve">
+    <value>キャプチャ範囲を選択してください。</value>
+  </data>
+  <data name="ErrorCaptureUnavailable" xml:space="preserve">
+    <value>この環境では画面キャプチャ（Windows.Graphics.Capture）が利用できません。Windows 10 バージョン 2004 以降が必要です。</value>
+  </data>
+  <data name="ErrorTargetLost" xml:space="preserve">
+    <value>撮影対象のウィンドウまたは画面が閉じられました。</value>
+  </data>
+  <data name="ErrorCaptureDevice" xml:space="preserve">
+    <value>グラフィックスデバイスの準備に失敗しました。ディスプレイドライバーを更新するか、PC を再起動してください。</value>
+  </data>
+  <data name="ErrorSettingsCorruptedFormat" xml:space="preserve">
+    <value>設定ファイルが壊れていたため、既定値で起動しました。壊れたファイルは次の場所に退避しました: {0}</value>
+  </data>
+  <data name="ErrorUnexpectedFormat" xml:space="preserve">
+    <value>予期しないエラーが発生しました: {0}</value>
+  </data>
+  <data name="ErrorClaudeNotFoundFormat" xml:space="preserve">
+    <value>claude コマンドが見つかりませんでした。Claude Code をインストールするか、設定で場所を指定してください。探した場所:
+{0}</value>
+  </data>
+  <data name="ErrorClaudeExecution" xml:space="preserve">
+    <value>Claude Code を起動できませんでした。インストール先と、ログイン済みかどうかを確認してください。</value>
+  </data>
+  <data name="ErrorAnalyzerTemplate" xml:space="preserve">
+    <value>解析用のテンプレート（analyzer）を読み込めませんでした。アプリを再インストールするか、設定から既定に戻してください。</value>
+  </data>
+
+  <!-- 解析（段階 2） -->
+  <data name="Analyze" xml:space="preserve">
+    <value>解析する…</value>
+  </data>
+  <data name="PromptWindowTitle" xml:space="preserve">
+    <value>プロンプトの確認</value>
+  </data>
+  <data name="NotesSectionHeader" xml:space="preserve">
+    <value>補助情報（任意）</value>
+  </data>
+  <data name="NoteSourceUrl" xml:space="preserve">
+    <value>動画の URL</value>
+  </data>
+  <data name="NoteAuthorName" xml:space="preserve">
+    <value>投稿者名</value>
+  </data>
+  <data name="NoteCaption" xml:space="preserve">
+    <value>キャプション</value>
+  </data>
+  <data name="NoteFreeText" xml:space="preserve">
+    <value>自由メモ</value>
+  </data>
+  <data name="RebuildPrompt" xml:space="preserve">
+    <value>メモを反映して作り直す</value>
+  </data>
+  <data name="PromptSectionHeader" xml:space="preserve">
+    <value>送信するプロンプト（編集できます）</value>
+  </data>
+  <data name="FrameCountFormat" xml:space="preserve">
+    <value>フレーム {0} 枚を添付します</value>
+  </data>
+  <data name="SendNotice" xml:space="preserve">
+    <value>フレーム画像と、ここに書いた内容が、あなたの Claude Code（＝あなたの利用枠）に送られます。Claude Code 以外の外部には送信しません。</value>
+  </data>
+  <data name="SendToClaude" xml:space="preserve">
+    <value>Claude Code に送る</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>取り消す</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>閉じる</value>
+  </data>
+
+  <data name="AnalysisWindowTitle" xml:space="preserve">
+    <value>解析中</value>
+  </data>
+  <data name="AnalysisRunningFormat" xml:space="preserve">
+    <value>解析しています… 経過 {0:0} 秒</value>
+  </data>
+  <data name="AnalysisRunningHint" xml:space="preserve">
+    <value>Claude Code がフレームを読み、Web を検索しています。数分かかることがあります。</value>
+  </data>
+  <data name="AnalysisCancelled" xml:space="preserve">
+    <value>解析を中止しました。</value>
+  </data>
+
+  <data name="ResultWindowTitle" xml:space="preserve">
+    <value>解析結果</value>
+  </data>
+  <data name="ResultTopCandidate" xml:space="preserve">
+    <value>第一候補</value>
+  </data>
+  <data name="ResultOtherCandidates" xml:space="preserve">
+    <value>他の候補</value>
+  </data>
+  <data name="ResultNoCandidates" xml:space="preserve">
+    <value>候補が立ちませんでした。追加情報を入れて再調査するか、撮り直してください。</value>
+  </data>
+  <data name="ResultConfidenceFormat" xml:space="preserve">
+    <value>確信度 {0:P0}</value>
+  </data>
+  <data name="ResultEvidence" xml:space="preserve">
+    <value>根拠</value>
+  </data>
+  <data name="ResultMismatches" xml:space="preserve">
+    <value>合わなかった点</value>
+  </data>
+  <data name="ResultSources" xml:space="preserve">
+    <value>参考 URL</value>
+  </data>
+  <data name="ResultObservedFeatures" xml:space="preserve">
+    <value>観察された特徴</value>
+  </data>
+  <data name="ResultUnverifiedPoints" xml:space="preserve">
+    <value>確認できなかった点</value>
+  </data>
+  <data name="ResultSearchQueries" xml:space="preserve">
+    <value>使われた検索語</value>
+  </data>
+  <data name="ResultRunInfoFormat" xml:space="preserve">
+    <value>ターン数 {0} / 所要 {1:0} 秒 / 費用 {2}</value>
+  </data>
+  <data name="ResultCostUnknown" xml:space="preserve">
+    <value>不明</value>
+  </data>
+  <data name="ResultRawOutput" xml:space="preserve">
+    <value>Claude Code の生の出力</value>
+  </data>
+  <data name="ResultSaveMarkdown" xml:space="preserve">
+    <value>Markdown で保存</value>
+  </data>
+  <data name="ResultSavedFormat" xml:space="preserve">
+    <value>保存しました: {0}</value>
+  </data>
+
+  <data name="ReinvestigateHeader" xml:space="preserve">
+    <value>結果が外れていたとき</value>
+  </data>
+  <data name="ReinvestigateHint" xml:space="preserve">
+    <value>追加で分かっていることを書いて再調査できます。再調査できるのは、この画面を閉じるまでです（閉じると一時データを削除します）。</value>
+  </data>
+  <data name="Reinvestigate" xml:space="preserve">
+    <value>再調査する</value>
+  </data>
+  <data name="ReinvestigateUnavailable" xml:space="preserve">
+    <value>一時データが残っていないため、再調査できません。</value>
+  </data>
+
+  <data name="DataNoticeHeader" xml:space="preserve">
+    <value>この解析のデータについて</value>
+  </data>
+  <data name="DataNoticeDeleted" xml:space="preserve">
+    <value>撮影した画像・プロンプト・ログは、この画面を閉じると削除します。</value>
+  </data>
+  <data name="DataNoticeTranscript" xml:space="preserve">
+    <value>ただし Claude Code 側の会話履歴には、読み取らせた画像が残ります。消す場合は次のファイルを削除してください。</value>
+  </data>
+  <data name="DataNoticeTranscriptNotFound" xml:space="preserve">
+    <value>Claude Code 側の会話履歴は見つかりませんでした（保存されていないか、置き場が変わった可能性があります）。</value>
+  </data>
+  <data name="CopyPath" xml:space="preserve">
+    <value>パスをコピー</value>
+  </data>
+  <data name="OpenContainingFolder" xml:space="preserve">
+    <value>フォルダを開く</value>
+  </data>
+  <data name="Copied" xml:space="preserve">
+    <value>コピーしました</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>コピー</value>
+  </data>
+
+  <!-- 配布：このアプリについて（D-06 / D-07 / D-11） -->
+  <data name="About" xml:space="preserve">
+    <value>このアプリについて</value>
+  </data>
+  <data name="AboutWindowTitle" xml:space="preserve">
+    <value>NutLens について</value>
+  </data>
+  <data name="AboutVersionFormat" xml:space="preserve">
+    <value>バージョン {0}</value>
+  </data>
+  <data name="AboutSummary" xml:space="preserve">
+    <value>ショート動画で紹介されている映画・ドラマ・短編を、画面と音から特定する Windows アプリです。動画のダウンロードはしません。人物の特定もしません。</value>
+  </data>
+  <data name="AboutTabLicense" xml:space="preserve">
+    <value>ライセンス</value>
+  </data>
+  <data name="AboutTabThirdParty" xml:space="preserve">
+    <value>使用しているソフトウェア</value>
+  </data>
+  <data name="AboutTabNotice" xml:space="preserve">
+    <value>ご利用にあたって</value>
+  </data>
+  <data name="AboutUsageNotice" xml:space="preserve">
+    <value>・解析には、利用者ご自身の Claude Code と、その利用枠を使います。撮影したフレーム画像・文字起こし・OCR の結果・入力したメモが Claude Code に渡ります。
+
+・Claude Code は自身の会話履歴を利用者の PC に保存します。読み取らせた画像も残ります。NutLens からは削除しません（他の会話を巻き込むため）。場所は結果画面に表示します。
+
+・Web Detection（既定オフ）を有効にした場合は、選ばれたフレームが Google にも送られます。この機能は実際の API で動作確認をしていません。
+
+・アプリ独自の送信（テレメトリ）はありません。
+
+・撮影した画像・音声と、そこから作ったデータは一時データです。結果画面を閉じたとき、次の撮影を始めたとき、ウィンドウを閉じたとき、アプリを終了したときに完全に削除します。
+
+・解析の結果は推測です。外れることがあります。
+
+・動画の取り扱いは、各サービスの規約に従ってください。本ソフトウェアは視聴中の画面をキャプチャするだけのものです。</value>
+  </data>
+  <data name="AboutOpenRepository" xml:space="preserve">
+    <value>リポジトリを開く</value>
+  </data>
+  <!-- 段階 5：データの保存先（D-05 / ADR-0033） -->
+  <data name="DataRootHeader" xml:space="preserve">
+    <value>データの保存先</value>
+  </data>
+  <data name="DataRootNotice" xml:space="preserve">
+    <value>設定・履歴・Whisper のモデル・一時ファイルを置く場所です。C ドライブ以外にも移せます。</value>
+  </data>
+  <data name="DataRootSummaryFormat" xml:space="preserve">
+    <value>{0} 件 / {1} MB（履歴 {2} 件）</value>
+  </data>
+  <data name="DataRootChange" xml:space="preserve">
+    <value>保存先を変更する…</value>
+  </data>
+  <data name="DataRootPickerTitle" xml:space="preserve">
+    <value>データの保存先にするフォルダを選んでください</value>
+  </data>
+  <data name="DataRootConfirmFormat" xml:space="preserve">
+    <value>データの保存先を変更します。
+
+  いま　 : {0}
+　　　　　 {1}
+  変更後 : {2}
+
+いまのデータを新しい場所へ移しますか？
+「いいえ」を選ぶと、新しい場所は空から始まります（元のデータは残ります）。
+
+［はい］移して切り替える
+［いいえ］移さずに切り替える
+［キャンセル］変更しない</value>
+  </data>
+  <data name="DataRootConfirmTitle" xml:space="preserve">
+    <value>データの保存先の変更</value>
+  </data>
+  <data name="DataRootRestartNeeded" xml:space="preserve">
+    <value>保存先を変更しました。次回の起動から新しい場所を使います。</value>
+  </data>
+  <data name="DataRootNotWritableFormat" xml:space="preserve">
+    <value>その場所には書き込めませんでした。保存先は変更していません。
+
+{0}</value>
+  </data>
+  <data name="DataRootCopyFailedFormat" xml:space="preserve">
+    <value>データをコピーできませんでした。保存先は変更していません。
+
+{0}</value>
+  </data>
+  <data name="DataRootSourceRemainsFormat" xml:space="preserve">
+    <value>保存先を変更しました。ただし元の場所を削除できませんでした。中身を確認のうえ、手で削除してください。
+
+{0}</value>
+  </data>
+
+  <!-- 段階 5：初回セットアップ（D-03 / D-07 / ADR-0029） -->
+  <data name="SetupWindowTitle" xml:space="preserve">
+    <value>NutLens のセットアップ</value>
+  </data>
+  <data name="SetupNoticeHeader" xml:space="preserve">
+    <value>はじめにお読みください</value>
+  </data>
+  <data name="SetupNotice" xml:space="preserve">
+    <value>NutLens は、撮影した画面と音声を、利用者ご自身の Claude Code を利用して調べることが出来ます。
+
+・解析には、ご自身の Claude の利用枠を使います。
+・フレーム画像・音声の文字起こし・OCR の結果・入力したメモが Claude Code に渡ります。
+・Claude Code は会話履歴をこの PC に保存します。読み取らせた画像も残ります。
+・Web Detection（既定オフ）を有効にした場合は、選んだフレームが Google にも送られます。
+・アプリ独自の送信はありません。
+・撮影した画像・音声は一時データで、解析が終わると削除します。</value>
+  </data>
+  <data name="SetupChecksHeader" xml:space="preserve">
+    <value>必要なものの確認</value>
+  </data>
+  <data name="SetupCheckClaudeInstalled" xml:space="preserve">
+    <value>Claude Code</value>
+  </data>
+  <data name="SetupCheckClaudeUsable" xml:space="preserve">
+    <value>Claude Code にログイン済みか</value>
+  </data>
+  <data name="SetupCheckWhisperModel" xml:space="preserve">
+    <value>Whisper のモデル（文字起こし）</value>
+  </data>
+  <data name="SetupCheckOcrLanguage" xml:space="preserve">
+    <value>OCR の認識言語（テロップの読み取り）</value>
+  </data>
+  <data name="SetupClaudeMissing" xml:space="preserve">
+    <value>見つかりません。公式の手順に従って導入してください。</value>
+  </data>
+  <data name="SetupClaudeFoundFormat" xml:space="preserve">
+    <value>{0} / {1}</value>
+  </data>
+  <data name="SetupClaudeUsableNg" xml:space="preserve">
+    <value>動きませんでした。ログインされているか確認してください。</value>
+  </data>
+  <data name="SetupClaudeUsableUnchecked" xml:space="preserve">
+    <value>未確認です。確認すると、利用枠をわずかに使います。</value>
+  </data>
+  <data name="SetupCheckClaudeUsableButton" xml:space="preserve">
+    <value>確認する（利用枠を少し使います）</value>
+  </data>
+  <data name="SetupModelMissing" xml:space="preserve">
+    <value>ありません。無くても撮影と解析はできますが、文字起こしは行われません。</value>
+  </data>
+  <data name="SetupModelFoundFormat" xml:space="preserve">
+    <value>{0} / {1} MB</value>
+  </data>
+  <data name="SetupOcrMissing" xml:space="preserve">
+    <value>使えません。無くても撮影と解析はできますが、テロップは読み取られません。</value>
+  </data>
+  <data name="SetupOpenClaudeDocs" xml:space="preserve">
+    <value>Claude Code の導入手順を開く</value>
+  </data>
+  <data name="SetupOpenLanguageSettings" xml:space="preserve">
+    <value>Windows の言語設定を開く</value>
+  </data>
+  <data name="SetupRecheck" xml:space="preserve">
+    <value>再確認</value>
+  </data>
+  <data name="SetupStart" xml:space="preserve">
+    <value>使いはじめる</value>
+  </data>
+  <data name="SetupCancel" xml:space="preserve">
+    <value>中止する</value>
+  </data>
+  <data name="SetupCancelConfirm" xml:space="preserve">
+    <value>セットアップを中止して NutLens を終了しますか？
+
+次回の起動時に、もう一度このセットアップが表示されます。</value>
+  </data>
+  <data name="SetupCancelWhileDownloading" xml:space="preserve">
+    <value>モデルをダウンロード中です。
+
+中止すると、ダウンロードも止めます。途中まで落とした分は残るので、次回は続きから再開します。
+
+セットアップを中止して NutLens を終了しますか？</value>
+  </data>
+
+  <!-- 段階 5：Whisper モデルのダウンロード（D-04 / ADR-0030） -->
+  <data name="ModelSectionHeader" xml:space="preserve">
+    <value>Whisper のモデルをダウンロード</value>
+  </data>
+  <data name="ModelNotice" xml:space="preserve">
+    <value>音声の文字起こしに使うモデルです。ナレーションから作品のあらすじを拾うのが役目なので、聞き取りの精度が特定に影響します。
+各モデルの違いは下の一覧を参照してください。あとから設定画面で入れ替えられます。</value>
+  </data>
+  <data name="ModelChoiceFormat" xml:space="preserve">
+    <value>{0}（約 {1} MB）</value>
+  </data>
+  <data name="ModelRecommended" xml:space="preserve">
+    <value>推奨</value>
+  </data>
+  <data name="ModelSizeFormat" xml:space="preserve">
+    <value>約 {0} MB</value>
+  </data>
+
+  <!--
+    モデルごとの説明（ADR-0034 決定 3・6）。
+    **精度の数字を書かない。** 測っていないものを測ったように見せない。
+    書くのは大きさと、一般に知られている位置づけだけ。
+  -->
+  <data name="ModelDesc_tiny" xml:space="preserve">
+    <value>いちばん軽く、処理も速い。聞き取りの精度は低く、動作確認向け。</value>
+  </data>
+  <data name="ModelDesc_base" xml:space="preserve">
+    <value>軽さと精度の釣り合いが取れている。日本語・英語の自動判別を確認済み。</value>
+  </data>
+  <data name="ModelDesc_small" xml:space="preserve">
+    <value>base より聞き取りが安定するとされる。迷ったらこれ。</value>
+  </data>
+  <data name="ModelDesc_medium" xml:space="preserve">
+    <value>small より精度が上がるとされる。BGM や早口に強い。</value>
+  </data>
+  <data name="ModelDesc_large_v3_turbo" xml:space="preserve">
+    <value>medium とほぼ同じ大きさで、より高精度とされる。large 系では最も速い。</value>
+  </data>
+  <data name="ModelDesc_large_v3" xml:space="preserve">
+    <value>最も高精度とされる。大きく、処理にも時間がかかる。</value>
+  </data>
+  <data name="ModelDownload" xml:space="preserve">
+    <value>ダウンロード</value>
+  </data>
+  <data name="ModelCancel" xml:space="preserve">
+    <value>中断</value>
+  </data>
+  <data name="ModelProgressFormat" xml:space="preserve">
+    <value>{0} MB / {1} MB</value>
+  </data>
+  <data name="ModelDone" xml:space="preserve">
+    <value>ダウンロードが完了しました。</value>
+  </data>
+  <data name="ModelCancelled" xml:space="preserve">
+    <value>中断しました。次にダウンロードすると、途中から再開します。</value>
+  </data>
+  <data name="ModelNetworkFailed" xml:space="preserve">
+    <value>ダウンロードに失敗しました。ネットワークを確認してください。</value>
+  </data>
+  <data name="ModelCorrupted" xml:space="preserve">
+    <value>落ちてきたファイルが壊れていました。もう一度お試しください。</value>
+  </data>
+
+  <!-- 段階 5：更新（D-02 / ADR-0028） -->
+  <data name="UpdateTitle" xml:space="preserve">
+    <value>更新があります</value>
+  </data>
+  <data name="UpdateBodyFormat" xml:space="preserve">
+    <value>NutLens {0} が公開されています（現在 {1}）。
+
+更新しますか？</value>
+  </data>
+  <data name="UpdateRestartNow" xml:space="preserve">
+    <value>今すぐ更新して再起動</value>
+  </data>
+  <data name="UpdateOnNextStart" xml:space="preserve">
+    <value>次回の起動時に適用</value>
+  </data>
+  <data name="UpdateSkip" xml:space="preserve">
+    <value>この版は見送る</value>
+  </data>
+  <data name="UpdateDownloadFailed" xml:space="preserve">
+    <value>更新のダウンロードに失敗しました。あとでもう一度お試しください。</value>
+  </data>
+  <data name="UpdateUpToDate" xml:space="preserve">
+    <value>最新です</value>
+  </data>
+  <data name="UpdateFoundFormat" xml:space="preserve">
+    <value>{0} が見つかりました</value>
+  </data>
+  <data name="UpdateSkippedFormat" xml:space="preserve">
+    <value>{0} は見送り済みです</value>
+  </data>
+  <data name="UpdateCheckFailed" xml:space="preserve">
+    <value>確認できませんでした（ネットワークを確認してください）</value>
+  </data>
+  <data name="UpdateNeverChecked" xml:space="preserve">
+    <value>更新をまだ確認していません。</value>
+  </data>
+  <data name="UpdateLastCheckedFormat" xml:space="preserve">
+    <value>最後の更新確認: {0}（{1}）</value>
+  </data>
+  <data name="UpdateCheckOnStartup" xml:space="preserve">
+    <value>起動時に更新を確認する</value>
+  </data>
+
+  <data name="AboutFileMissingFormat" xml:space="preserve">
+    <value>{0} が見つかりませんでした。配布物に含まれているか確認してください。</value>
+  </data>
+
+  <!-- 段階 3'：Web Detection（F-14 / 5.6） -->
+  <data name="AdvancedSectionHeader" xml:space="preserve">
+    <value>高度な設定（上級者向け）</value>
+  </data>
+  <data name="WebDetectionEnable" xml:space="preserve">
+    <value>Web Detection を使う（フレームが Google に送られます）</value>
+  </data>
+  <data name="WebDetectionMaxImages" xml:space="preserve">
+    <value>送る枚数</value>
+  </data>
+  <data name="WebDetectionSetKey" xml:space="preserve">
+    <value>API キーを設定する…</value>
+  </data>
+  <data name="WebDetectionDeleteKey" xml:space="preserve">
+    <value>API キーを削除する</value>
+  </data>
+  <data name="WebDetectionKeyPresent" xml:space="preserve">
+    <value>API キーは Windows 資格情報マネージャーに保存されています。</value>
+  </data>
+  <data name="WebDetectionKeyMissing" xml:space="preserve">
+    <value>API キーが未設定のため、Web Detection は使われません。</value>
+  </data>
+  <data name="WebDetectionConsentTitle" xml:space="preserve">
+    <value>Web Detection を有効にします</value>
+  </data>
+  <data name="WebDetectionConsentBodyFormat" xml:space="preserve">
+    <value>Web Detection を有効にします。
+
+・選んだフレーム（最大 {0} 枚）が Google に送られます。
+・利用者ご自身の Google Cloud の API キーと課金設定が必要です。利用料がかかる場合があります。
+・Google Cloud の規約に従ってご利用ください。
+
+送るのはフレーム全体です。顔の検出や人物の特定には使いません。
+
+有効にしますか？</value>
+  </data>
+  <data name="WebDetectionKeyPromptTitle" xml:space="preserve">
+    <value>Google Cloud Vision の API キー</value>
+  </data>
+  <data name="WebDetectionKeyPromptBody" xml:space="preserve">
+    <value>API キーを貼り付けてください。キーは Windows 資格情報マネージャーに保存され、設定ファイルやログには書き込みません。</value>
+  </data>
+  <data name="WebDetectionKeySaved" xml:space="preserve">
+    <value>API キーを保存しました。</value>
+  </data>
+  <data name="WebDetectionKeyDeleted" xml:space="preserve">
+    <value>API キーを削除しました。</value>
+  </data>
+  <data name="WebDetectionUsedFormat" xml:space="preserve">
+    <value>Web Detection を使用（{0} 枚送信）</value>
+  </data>
+  <data name="WebDetectionFailedFormat" xml:space="preserve">
+    <value>Web Detection は使えませんでした（{0}）。解析は続けました。</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>保存する</value>
+  </data>
+
+  <!-- 段階 4：トレイ（6 章 / ADR-0025） -->
+  <data name="TrayStartCapture" xml:space="preserve">
+    <value>撮影を開始</value>
+  </data>
+  <data name="TrayStopCapture" xml:space="preserve">
+    <value>撮影を停止</value>
+  </data>
+  <data name="TrayOpenWindow" xml:space="preserve">
+    <value>ウィンドウを開く</value>
+  </data>
+  <data name="TraySettings" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="TrayExit" xml:space="preserve">
+    <value>終了</value>
+  </data>
+  <data name="TrayTooltipCapturing" xml:space="preserve">
+    <value>NutLens — 撮影中</value>
+  </data>
+
+  <!-- 段階 4：閉じるときの確認（ADR-0025 決定 3） -->
+  <data name="ConfirmTitle" xml:space="preserve">
+    <value>確認</value>
+  </data>
+  <data name="ConfirmCloseWithTemporaryData" xml:space="preserve">
+    <value>撮影したデータがまだ解析されていません。
+ウィンドウを閉じると削除されます。
+
+閉じますか？</value>
+  </data>
+  <data name="ConfirmCloseWhileCapturing" xml:space="preserve">
+    <value>撮影中です。
+ウィンドウを閉じると撮影を中止し、撮影したデータを削除します。
+
+閉じますか？</value>
+  </data>
+  <data name="ClosedToTrayNotice" xml:space="preserve">
+    <value>タスクトレイに常駐しています。終了するにはトレイのアイコンを右クリックして「終了」を選んでください。</value>
+  </data>
+
+  <!-- 段階 4：ホットキー（F-04 / ADR-0023） -->
+  <data name="HotkeySectionHeader" xml:space="preserve">
+    <value>ホットキー</value>
+  </data>
+  <data name="HotkeyEnable" xml:space="preserve">
+    <value>グローバルホットキーで撮影を開始・停止する</value>
+  </data>
+  <data name="HotkeyGestureLabel" xml:space="preserve">
+    <value>キー</value>
+  </data>
+  <data name="HotkeyHint" xml:space="preserve">
+    <value>Ctrl / Alt / Shift / Win と、A〜Z・0〜9・F1〜F24 を + でつなぎます（例: Ctrl+Shift+F9）。記号キーは配列によって変わるため使えません。</value>
+  </data>
+  <data name="HotkeyInvalidFormat" xml:space="preserve">
+    <value>ホットキーの書式が正しくありません: {0}</value>
+  </data>
+  <data name="HotkeyRegisterFailedFormat" xml:space="preserve">
+    <value>ホットキー（{0}）を登録できませんでした。他のアプリが使っている可能性があります。</value>
+  </data>
+
+  <!-- 段階 4：設定画面 -->
+  <data name="SettingsWindowTitle" xml:space="preserve">
+    <value>NutLens の設定</value>
+  </data>
+  <data name="SettingsTabCapture" xml:space="preserve">
+    <value>撮影</value>
+  </data>
+  <data name="SettingsTabAnalysis" xml:space="preserve">
+    <value>解析</value>
+  </data>
+  <data name="SettingsTabHistory" xml:space="preserve">
+    <value>履歴</value>
+  </data>
+  <data name="SettingsTabAdvanced" xml:space="preserve">
+    <value>高度な設定（上級者向け）</value>
+  </data>
+  <data name="SettingsClaudePath" xml:space="preserve">
+    <value>claude のパス（空欄なら自動で探す）</value>
+  </data>
+  <data name="SettingsMaxTurns" xml:space="preserve">
+    <value>最大ターン数</value>
+  </data>
+  <data name="SettingsWhisperModel" xml:space="preserve">
+    <value>Whisper のモデル（空欄なら既定の場所）</value>
+  </data>
+  <data name="SettingsWhisperEnabled" xml:space="preserve">
+    <value>音声を文字起こしする</value>
+  </data>
+  <data name="SettingsOcrEnabled" xml:space="preserve">
+    <value>テロップ・字幕を読み取る（OCR）</value>
+  </data>
+  <data name="SettingsOcrLanguage" xml:space="preserve">
+    <value>OCR の言語（空欄なら自動）</value>
+  </data>
+  <data name="SettingsJpegQuality" xml:space="preserve">
+    <value>JPEG 品質</value>
+  </data>
+  <data name="SettingsCaptureCursor" xml:space="preserve">
+    <value>マウスカーソルを写す</value>
+  </data>
+  <data name="SettingsKeepTemporaryData" xml:space="preserve">
+    <value>一時データを残す（デバッグ用。既定はオフ）</value>
+  </data>
+  <data name="SettingsKeepTemporaryDataWarning" xml:space="preserve">
+    <value>オンにすると、撮影した画像と音声が解析後も削除されません。</value>
+  </data>
+  <data name="SettingsSaved" xml:space="preserve">
+    <value>設定を保存しました。</value>
+  </data>
+
+  <!-- 段階 4：履歴（F-28 / ADR-0024） -->
+  <data name="HistoryEmpty" xml:space="preserve">
+    <value>履歴はまだありません。</value>
+  </data>
+  <data name="HistoryNotice" xml:space="preserve">
+    <value>履歴には結果のテキストだけを残します。撮影した画像・音声・文字起こし・OCR の結果は残りません。</value>
+  </data>
+  <data name="HistoryDelete" xml:space="preserve">
+    <value>この履歴を削除</value>
+  </data>
+  <data name="HistoryDeleteAll" xml:space="preserve">
+    <value>履歴をすべて削除</value>
+  </data>
+  <data name="HistoryRefresh" xml:space="preserve">
+    <value>再読み込み</value>
+  </data>
+  <data name="HistoryConfirmDeleteAll" xml:space="preserve">
+    <value>履歴をすべて削除します。元に戻せません。
+
+削除しますか？</value>
+  </data>
+  <data name="HistoryCountFormat" xml:space="preserve">
+    <value>{0} 件</value>
+  </data>
+  <data name="HistoryNoCandidate" xml:space="preserve">
+    <value>（候補なし）</value>
+  </data>
+</root>

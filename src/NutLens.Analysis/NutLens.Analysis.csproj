@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    ADR-0011: 外部プロセス（claude）を起動する実装はここだけに置く。
+    -windows を付けないことで、プラットフォーム依存の混入をビルドで止める。
+    段階 3 の後に足す Web Detection（HTTP）も、外部へ出る経路としてここに入れる。
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>NutLens.Analysis</RootNamespace>
+    <AssemblyName>NutLens.Analysis</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NutLens.Core\NutLens.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- 起動引数の組み立て（ADR-0006 決定 4）をテストで固定するため -->
+    <InternalsVisibleTo Include="NutLens.Core.Tests" />
+  </ItemGroup>
+
+</Project>

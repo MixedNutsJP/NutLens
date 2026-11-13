@@ -1,0 +1,212 @@
+<Window x:Class="NutLens.App.Views.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:res="clr-namespace:NutLens.App.Resources"
+        xmlns:views="clr-namespace:NutLens.App.Views"
+        Title="{x:Static res:Strings.SettingsWindowTitle}"
+        Width="660"
+        Height="600"
+        MinWidth="560"
+        MinHeight="480"
+        WindowStartupLocation="CenterOwner"
+        FontSize="13">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+
+        <Style TargetType="TextBlock" x:Key="FieldLabel">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="0,0,8,0" />
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="0,2,0,2" />
+            <Setter Property="Padding" Value="4,3" />
+        </Style>
+
+        <Style TargetType="CheckBox">
+            <Setter Property="Margin" Value="0,6,0,0" />
+        </Style>
+
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="12,5" />
+            <Setter Property="Margin" Value="0,0,8,0" />
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TabControl Grid.Row="0">
+
+            <!-- 撮影 -->
+            <TabItem Header="{x:Static res:Strings.SettingsTabCapture}">
+                <StackPanel Margin="14">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="90" />
+                            <ColumnDefinition Width="24" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="90" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static res:Strings.IntervalSeconds}" Style="{StaticResource FieldLabel}" />
+                        <TextBox   Grid.Row="0" Grid.Column="1" Text="{Binding IntervalSeconds}" />
+                        <TextBlock Grid.Row="0" Grid.Column="3" Text="{x:Static res:Strings.DurationSeconds}" Style="{StaticResource FieldLabel}" />
+                        <TextBox   Grid.Row="0" Grid.Column="4" Text="{Binding DurationSeconds}" />
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="{x:Static res:Strings.DuplicateThreshold}" Style="{StaticResource FieldLabel}" />
+                        <TextBox   Grid.Row="1" Grid.Column="1" Text="{Binding DuplicateThreshold}" />
+                        <TextBlock Grid.Row="1" Grid.Column="3" Text="{x:Static res:Strings.MaxFrames}" Style="{StaticResource FieldLabel}" />
+                        <TextBox   Grid.Row="1" Grid.Column="4" Text="{Binding MaxFrames}" />
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="{x:Static res:Strings.LongEdgePixels}" Style="{StaticResource FieldLabel}" />
+                        <TextBox   Grid.Row="2" Grid.Column="1" Text="{Binding LongEdgePixels}" />
+                        <TextBlock Grid.Row="2" Grid.Column="3" Text="{x:Static res:Strings.SettingsJpegQuality}" Style="{StaticResource FieldLabel}" />
+                        <TextBox   Grid.Row="2" Grid.Column="4" Text="{Binding JpegQuality}" />
+                    </Grid>
+
+                    <CheckBox Content="{x:Static res:Strings.SettingsCaptureCursor}" IsChecked="{Binding CaptureCursor}" />
+                    <CheckBox Content="{x:Static res:Strings.RecordAudio}" IsChecked="{Binding RecordAudio}" />
+                    <TextBlock Text="{x:Static res:Strings.AudioNotice}" TextWrapping="Wrap" Margin="0,4,0,0" Opacity="0.75" />
+                </StackPanel>
+            </TabItem>
+
+            <!-- 解析 -->
+            <TabItem Header="{x:Static res:Strings.SettingsTabAnalysis}">
+                <StackPanel Margin="14">
+                    <TextBlock Text="{x:Static res:Strings.SettingsClaudePath}" />
+                    <TextBox Text="{Binding ClaudePath}" FontFamily="Consolas, Meiryo, monospace" />
+
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                        <TextBlock Text="{x:Static res:Strings.SettingsMaxTurns}" Style="{StaticResource FieldLabel}" />
+                        <TextBox Width="80" Text="{Binding MaxTurns}" />
+                    </StackPanel>
+
+                    <CheckBox Content="{x:Static res:Strings.SettingsWhisperEnabled}" IsChecked="{Binding WhisperEnabled}" Margin="0,14,0,0" />
+                    <TextBlock Text="{x:Static res:Strings.SettingsWhisperModel}" Margin="0,8,0,0" />
+                    <TextBox Text="{Binding WhisperModelPath}" FontFamily="Consolas, Meiryo, monospace" />
+
+                    <CheckBox Content="{x:Static res:Strings.SettingsOcrEnabled}" IsChecked="{Binding OcrEnabled}" Margin="0,14,0,0" />
+                    <TextBlock Text="{x:Static res:Strings.SettingsOcrLanguage}" Margin="0,8,0,0" />
+                    <TextBox Width="120" HorizontalAlignment="Left" Text="{Binding OcrLanguage}" />
+                </StackPanel>
+            </TabItem>
+
+            <!-- 履歴（5.5：履歴は設定画面から個別・一括で消せる） -->
+            <TabItem Header="{x:Static res:Strings.SettingsTabHistory}" DataContext="{Binding History}">
+                <Grid Margin="14">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0">
+                        <TextBlock Text="{x:Static res:Strings.HistoryNotice}" TextWrapping="Wrap" Opacity="0.75" />
+                        <TextBlock Text="{Binding CountText}" Margin="0,8,0,6" />
+                        <TextBlock Text="{x:Static res:Strings.HistoryEmpty}"
+                                   Opacity="0.7"
+                                   Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibility}}" />
+                    </StackPanel>
+
+                    <ListBox Grid.Row="1"
+                             ItemsSource="{Binding Items}"
+                             SelectedItem="{Binding Selected}"
+                             HorizontalContentAlignment="Stretch">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="0,4">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding SavedAt}" Opacity="0.7" Margin="0,0,10,0" />
+                                        <TextBlock Text="{Binding TopTitle}" FontWeight="SemiBold" />
+                                        <TextBlock Text="{Binding Confidence}" Opacity="0.7" Margin="8,0,0,0" />
+                                    </StackPanel>
+                                    <TextBlock Text="{Binding OtherTitles}"
+                                               Opacity="0.7"
+                                               TextWrapping="Wrap"
+                                               Visibility="{Binding HasOtherTitles, Converter={StaticResource BoolToVisibility}}" />
+                                    <TextBlock Text="{Binding Notes}"
+                                               Opacity="0.6"
+                                               TextWrapping="Wrap"
+                                               Visibility="{Binding HasNotes, Converter={StaticResource BoolToVisibility}}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,10,0,0">
+                        <Button Content="{x:Static res:Strings.HistoryRefresh}" Command="{Binding RefreshCommand}" />
+                        <Button Content="{x:Static res:Strings.HistoryDelete}" Command="{Binding DeleteCommand}" />
+                        <Button Content="{x:Static res:Strings.HistoryDeleteAll}" Command="{Binding DeleteAllCommand}" />
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+            <!-- 高度な設定（上級者向け）。この見出しを出すこと自体が 5.6 の要求 -->
+            <TabItem Header="{x:Static res:Strings.SettingsTabAdvanced}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="14">
+                        <!-- D-05：保存先を固定で書かない（ADR-0033） -->
+                        <TextBlock Text="{x:Static res:Strings.DataRootHeader}" FontWeight="SemiBold" />
+                        <TextBlock Text="{x:Static res:Strings.DataRootNotice}" TextWrapping="Wrap" Opacity="0.75" Margin="0,2,0,0" />
+                        <TextBox Text="{Binding DataRootPath, Mode=OneWay}"
+                                 IsReadOnly="True"
+                                 TextWrapping="Wrap"
+                                 Margin="0,6,0,0"
+                                 FontFamily="Consolas, Meiryo, monospace" />
+                        <TextBlock Text="{Binding DataRootSummary}" Opacity="0.75" Margin="0,4,0,0" />
+                        <Button Content="{x:Static res:Strings.DataRootChange}"
+                                Command="{Binding ChangeDataRootCommand}"
+                                HorizontalAlignment="Left"
+                                Margin="0,8,0,0" />
+
+                        <TextBlock Text="{x:Static res:Strings.HotkeySectionHeader}" FontWeight="SemiBold" Margin="0,20,0,0" />
+                        <CheckBox Content="{x:Static res:Strings.HotkeyEnable}" IsChecked="{Binding HotkeyEnabled}" />
+                        <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                            <TextBlock Text="{x:Static res:Strings.HotkeyGestureLabel}" Style="{StaticResource FieldLabel}" />
+                            <TextBox Width="200" Text="{Binding HotkeyGestureText}" />
+                        </StackPanel>
+                        <TextBlock Text="{x:Static res:Strings.HotkeyHint}" TextWrapping="Wrap" Margin="0,6,0,0" Opacity="0.75" />
+
+                        <TextBlock Text="{x:Static res:Strings.WebDetectionEnable}" FontWeight="SemiBold" Margin="0,20,0,0" />
+                        <StackPanel DataContext="{Binding WebDetection}">
+                            <CheckBox Content="{x:Static res:Strings.WebDetectionEnable}" IsChecked="{Binding Enabled}" />
+                            <TextBlock Text="{Binding KeyStatusText}" TextWrapping="Wrap" Margin="0,6,0,0" Opacity="0.75" />
+                            <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                <Button Content="{x:Static res:Strings.WebDetectionSetKey}" Command="{Binding SetApiKeyCommand}" />
+                                <Button Content="{x:Static res:Strings.WebDetectionDeleteKey}" Command="{Binding DeleteApiKeyCommand}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                <TextBlock Text="{x:Static res:Strings.WebDetectionMaxImages}" Style="{StaticResource FieldLabel}" />
+                                <TextBox Width="60" Text="{Binding MaxImages, UpdateSourceTrigger=LostFocus}" />
+                            </StackPanel>
+                        </StackPanel>
+
+                        <CheckBox Content="{x:Static res:Strings.SettingsKeepTemporaryData}" IsChecked="{Binding KeepTemporaryData}" Margin="0,20,0,0" />
+                        <TextBlock Text="{x:Static res:Strings.SettingsKeepTemporaryDataWarning}" TextWrapping="Wrap" Margin="0,4,0,0" Opacity="0.75" />
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+
+        <DockPanel Grid.Row="1" Margin="0,14,0,0">
+            <!-- D-06：ライセンスを「このアプリについて」から見られるようにする -->
+            <Button Content="{x:Static res:Strings.About}" Click="OnAboutClick" DockPanel.Dock="Left" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="{x:Static res:Strings.Cancel}" IsCancel="True" />
+                <Button Content="{x:Static res:Strings.Save}" IsDefault="True" Click="OnSaveClick" FontWeight="SemiBold" />
+            </StackPanel>
+        </DockPanel>
+    </Grid>
+</Window>

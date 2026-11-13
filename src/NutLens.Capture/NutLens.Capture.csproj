@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    ADR-0002: 外界（WinRT / Win32 / WIC）に触る実装の層。
+    UI のクラスは置かない。UseWPF は System.Windows.Media.Imaging（WIC）のためだけ（ADR-0008 決定 2）。
+  -->
+
+  <PropertyGroup>
+    <!--
+      射影の版は 22621。GraphicsCaptureSession.IsBorderRequired（録画枠を消す）が
+      22000 以降にしか無く、19041 の射影ではそもそもコンパイルできないため。
+      実行時の下限は 19041 のままにし、22000 以降の API は
+      OperatingSystem.IsWindowsVersionAtLeast で囲う（ADR-0003 決定 3）。
+    -->
+    <TargetFramework>net10.0-windows10.0.22621.0</TargetFramework>
+    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+    <RootNamespace>NutLens.Capture</RootNamespace>
+    <AssemblyName>NutLens.Capture</AssemblyName>
+    <UseWPF>true</UseWPF>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <!--
+      GetWindowLongPtrW はアーキテクチャごとに形が違うため、CsWin32 が
+      AnyCPU では生成できない。x64 として生成しつつ、ビルド自体は AnyCPU のまま進める。
+    -->
+    <CsWin32PlatformTarget>x64</CsWin32PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- 段階 3：WASAPI ループバック録音とローカル文字起こし（ADR-0016 / ADR-0017） -->
+    <PackageReference Include="NAudio" />
+    <PackageReference Include="Whisper.net" />
+    <PackageReference Include="Whisper.net.Runtime" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Windows.CsWin32">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NutLens.Core\NutLens.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="NativeMethods.txt" />
+  </ItemGroup>
+
+</Project>

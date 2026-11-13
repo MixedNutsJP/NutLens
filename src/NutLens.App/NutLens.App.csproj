@@ -1,0 +1,72 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    WPF 本体。合成ルート（App.xaml.cs）だけが具体型を知る（ADR-0002 決定 4）。
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows10.0.22621.0</TargetFramework>
+    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+    <RootNamespace>NutLens.App</RootNamespace>
+    <AssemblyName>NutLens</AssemblyName>
+    <OutputType>WinExe</OutputType>
+    <UseWPF>true</UseWPF>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <!--
+      ADR-0027 決定 4：VelopackApp.Build().Run() を Main の先頭で呼ぶため、
+      WPF が自動生成する Main ではなく自前の Program を入口にする。
+      **これを外すと、生成された Main が使われてフックが動かなくなる**
+      （しかもアプリは普通に起動するので気づけない）。
+    -->
+    <StartupObject>NutLens.App.Program</StartupObject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+    <!-- 段階 4：タスクトレイ（MIT）。ADR-0009 / ADR-0025 -->
+    <PackageReference Include="H.NotifyIcon.Wpf" />
+    <!-- 段階 5：インストーラーと自動更新（MIT）。ADR-0027 -->
+    <PackageReference Include="Velopack" />
+  </ItemGroup>
+
+  <!-- トレイのアイコン（待機中・撮影中の 2 つ。ADR-0025 決定 6） -->
+  <ItemGroup>
+    <Resource Include="Resources\tray-idle.ico" />
+    <Resource Include="Resources\tray-capturing.ico" />
+  </ItemGroup>
+
+  <!--
+    D-06：ライセンスを配布物に同梱し、「このアプリについて」から読めるようにする。
+    **文面をコードに埋め込まない。** 埋め込むと、ファイルを直したのに画面が古いまま、
+    という食い違いが起きる。MIT は「ライセンス文を残す」ことを条件にしているので、
+    配布物に実体があること自体にも意味がある。
+  -->
+  <ItemGroup>
+    <Content Include="..\..\LICENSE" Link="LICENSE" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\..\THIRD_PARTY_NOTICES.md" Link="THIRD_PARTY_NOTICES.md" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NutLens.Core\NutLens.Core.csproj" />
+    <ProjectReference Include="..\NutLens.Capture\NutLens.Capture.csproj" />
+    <ProjectReference Include="..\NutLens.Analysis\NutLens.Analysis.csproj" />
+  </ItemGroup>
+
+  <!--
+    F-23 / ADR-0014：analyzer/ をアプリの隣に配置する。
+    AnalyzerTemplateDeployer が AppContext.BaseDirectory の下から探して、
+    撮影ごとのセッションフォルダへ複製する。
+    .claude/ のような隠しフォルダも含めるため、ワイルドカードを明示的に書く。
+  -->
+  <ItemGroup>
+    <Content Include="..\..\analyzer\**\*.*" LinkBase="analyzer" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <!--
+    D-09：UI の文字列はリソースに分ける。日本語が既定（中立リソース）、英語は Strings.en.resx。
+    アクセス用のクラスは Resources/Strings.cs に手で書いている。
+    自動生成（ResXFileCodeGenerator）は Visual Studio でしか走らず、
+    dotnet build だけでビルドできる状態を保ちたいため。
+  -->
+
+</Project>

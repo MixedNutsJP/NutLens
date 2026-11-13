@@ -1,0 +1,48 @@
+<Project>
+
+  <!-- 配布に関わる値は 1 箇所に集める（ADR-0031 決定 7） -->
+  <Import Project="$(MSBuildThisFileDirectory)build\Distribution.props" />
+
+  <!--
+    リポジトリ全体に効く共通設定。
+    個別の .csproj では TFM と UseWPF など、プロジェクト固有のものだけを書く。
+  -->
+
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <InvariantGlobalization>false</InvariantGlobalization>
+    <NeutralLanguage>ja-JP</NeutralLanguage>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!--
+      ADR-0010: 型の明示を強制する。
+      EnforceCodeStyleInBuild が無いと .editorconfig の IDE0007 / IDE0008 は
+      Visual Studio の中でしか出ず、dotnet build と CI では素通りする。
+      この 1 行が無いと規約が効かない。
+    -->
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Product>NutLens</Product>
+    <Company>MixedNuts</Company>
+    <Copyright>Copyright (c) 2026 MixedNuts</Copyright>
+    <Version>0.1.0</Version>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <FileVersion>0.1.0.0</FileVersion>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+  </PropertyGroup>
+
+</Project>

@@ -1,0 +1,37 @@
+<Project>
+
+  <!--
+    配布に関わる値（ADR-0031 決定 7）。
+
+    **owner / repo をコードにも複数の yml にも散らさない。**
+    リポジトリを移したときに直す場所を 1 つにする。
+    GitHub Actions（release.yml）も、アプリ（AboutViewModel / VelopackUpdateService）も、
+    この 1 ファイルを出どころにする。
+  -->
+
+  <PropertyGroup>
+    <DistributionOwner>MixedNutsJP</DistributionOwner>
+    <DistributionRepository>NutLens</DistributionRepository>
+    <RepositoryUrl>https://github.com/$(DistributionOwner)/$(DistributionRepository)</RepositoryUrl>
+
+    <!--
+      Velopack のパッケージ ID。**インストール先のフォルダ名になる**（%LOCALAPPDATA%\<ID>）。
+
+      ここを `NutLens` にすると、インストール先が利用者のデータの置き場
+      （%LOCALAPPDATA%\NutLens\history 等）と重なり、
+      **アンインストールが履歴ごと消す**（ADR-0027 決定 2）。
+      気づくのはアンインストールしたときで、そのときには戻せない。
+    -->
+    <VelopackPackageId>NutLensApp</VelopackPackageId>
+
+    <!-- 画面と Windows の「アプリと機能」に出る名前 -->
+    <VelopackPackageTitle>NutLens</VelopackPackageTitle>
+  </PropertyGroup>
+
+  <!-- 実行時に読む（AboutViewModel / VelopackUpdateService） -->
+  <ItemGroup>
+    <AssemblyMetadata Include="RepositoryUrl" Value="$(RepositoryUrl)" />
+    <AssemblyMetadata Include="VelopackPackageId" Value="$(VelopackPackageId)" />
+  </ItemGroup>
+
+</Project>

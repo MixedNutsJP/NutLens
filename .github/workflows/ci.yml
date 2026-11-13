@@ -1,0 +1,84 @@
+name: CI
+
+# **第三者の action はコミット SHA で固定する。**
+# タグは後から動かせるので、`@v4` のままだと「同じものを使っている」ことを保証できない。
+# 末尾のコメントが人間向けの版表示。上げるときは両方を同時に直す。
+
+# ADR-0031 決定 2：main への push ではリリースしない。ビルドとテストだけ。
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    # WPF と Windows 専用 API を使うので windows でしか通らない。
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
+
+      - uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9  # v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore
+        run: dotnet restore NutLens.slnx
+
+      # TreatWarningsAsErrors が有効なので、警告が 1 つでもあればここで落ちる。
+      # var / dynamic の禁止（ADR-0010）もここで効く。
+      - name: Build
+        run: dotnet build NutLens.slnx -c Release --no-restore
+
+      - name: Test
+        run: dotnet test NutLens.slnx -c Release --no-build
+
+  # 設計書と実装がずれていないかの、ごく粗い見張り。
+  # **中身の正しさは見ない。** ファイルが消えていないことだけを見る。
+  docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
+
+      - name: 必須の文書があること / Required documents exist
+        shell: bash
+        run: |
+          missing=0
+          for f in \
+            LICENSE \
+            README.md \
+            SECURITY.md \
+            CONTRIBUTING.md \
+            CODE_SIGNING_POLICY.md \
+            THIRD_PARTY_NOTICES.md \
+            CLAUDE.md \
+            docs/adr/README.md \
+            docs/design/00-traceability.md
+          do
+            if [ ! -f "$f" ]; then
+              echo "::error file=$f::$f がありません / is missing"
+              missing=1
+            fi
+          done
+          exit $missing
+
+      - name: ADR が索引に載っていること / Every ADR is listed in the index
+        shell: bash
+        run: |
+          # 「1 行足すまでが 1 つの作業」（CLAUDE.md §3）を機械で見張る。
+          # 忘れると索引が嘘になる。
+          missing=0
+          for f in docs/adr/[0-9]*.md; do
+            name=$(basename "$f")
+            if ! grep -q "$name" docs/adr/README.md; then
+              echo "::error file=$f::$name が docs/adr/README.md に載っていません / is not in the index"
+              missing=1
+            fi
+          done
+          exit $missing

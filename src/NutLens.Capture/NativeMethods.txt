@@ -1,0 +1,48 @@
+// CsWin32 に生成させる Win32 API（CLAUDE.md §4.4：P/Invoke は手書きしない）。
+
+// ウィンドウの列挙と判定（F-01）
+EnumWindows
+IsWindowVisible
+IsIconic
+GetWindowTextW
+GetWindowTextLengthW
+GetWindowLongPtrW
+GetShellWindow
+WINDOW_EX_STYLE
+WINDOW_LONG_PTR_INDEX
+
+// UWP の幽霊ウィンドウを除くための DWM 問い合わせ
+DwmGetWindowAttribute
+DWMWINDOWATTRIBUTE
+
+// モニタの列挙（「画面の矩形」をモニタ取得＋切り出しで実現する。ADR-0003 決定 2）
+EnumDisplayMonitors
+GetMonitorInfoW
+MONITORINFOEXW
+
+// Direct3D 11 デバイス（Direct3D11CaptureFramePool が IDirect3DDevice を要求するため）
+D3D11CreateDevice
+ID3D11Device
+IDXGIDevice
+D3D_DRIVER_TYPE
+D3D_FEATURE_LEVEL
+D3D11_CREATE_DEVICE_FLAG
+D3D11_SDK_VERSION
+
+// グローバルホットキー（F-04 / ADR-0023）
+RegisterHotKey
+UnregisterHotKey
+HOT_KEY_MODIFIERS
+
+// 資格情報マネージャー（5.6：API キーを平文で保存しない。ADR-0020）
+CredWriteW
+CredReadW
+CredDeleteW
+CredFree
+CREDENTIALW
+CRED_TYPE
+CRED_PERSIST
+
+// WinRT のアクティベーションファクトリと d3d11.dll の相互運用は、
+// 戻り値が WinRT の型になるため CsWin32 では扱えない。
+// Graphics/CaptureInterop.cs に LibraryImport で手書きしている（例外的措置）。

@@ -1,0 +1,107 @@
+<Window x:Class="NutLens.App.Views.PromptReviewWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:res="clr-namespace:NutLens.App.Resources"
+        Title="{x:Static res:Strings.PromptWindowTitle}"
+        Width="760"
+        Height="720"
+        MinWidth="640"
+        MinHeight="560"
+        WindowStartupLocation="CenterOwner"
+        FontSize="13">
+
+    <Window.Resources>
+        <Style TargetType="TextBlock" x:Key="SectionHeader">
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Margin" Value="0,14,0,6" />
+        </Style>
+        <Style TargetType="TextBlock" x:Key="FieldLabel">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="0,0,8,0" />
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="0,2,0,2" />
+            <Setter Property="Padding" Value="4,3" />
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="14,6" />
+            <Setter Property="Margin" Value="8,0,0,0" />
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- 補助情報（F-13） -->
+        <StackPanel Grid.Row="0">
+            <TextBlock Text="{x:Static res:Strings.NotesSectionHeader}" Style="{StaticResource SectionHeader}" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static res:Strings.NoteSourceUrl}" Style="{StaticResource FieldLabel}" />
+                <TextBox   Grid.Row="0" Grid.Column="1" Text="{Binding SourceUrl, UpdateSourceTrigger=PropertyChanged}" />
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="{x:Static res:Strings.NoteAuthorName}" Style="{StaticResource FieldLabel}" />
+                <TextBox   Grid.Row="1" Grid.Column="1" Text="{Binding AuthorName, UpdateSourceTrigger=PropertyChanged}" />
+
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="{x:Static res:Strings.NoteCaption}" Style="{StaticResource FieldLabel}" />
+                <TextBox   Grid.Row="2" Grid.Column="1" Text="{Binding Caption, UpdateSourceTrigger=PropertyChanged}" />
+
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="{x:Static res:Strings.NoteFreeText}" Style="{StaticResource FieldLabel}" VerticalAlignment="Top" Margin="0,6,8,0" />
+                <TextBox   Grid.Row="3" Grid.Column="1"
+                           Text="{Binding FreeText, UpdateSourceTrigger=PropertyChanged}"
+                           AcceptsReturn="True"
+                           TextWrapping="Wrap"
+                           Height="56"
+                           VerticalScrollBarVisibility="Auto" />
+            </Grid>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
+            <Button Content="{x:Static res:Strings.RebuildPrompt}" Command="{Binding RebuildCommand}" />
+        </StackPanel>
+
+        <!-- プロンプト（F-22） -->
+        <DockPanel Grid.Row="2" Margin="0,8,0,0">
+            <TextBlock DockPanel.Dock="Top"
+                       Text="{x:Static res:Strings.PromptSectionHeader}"
+                       Style="{StaticResource SectionHeader}" />
+            <TextBlock DockPanel.Dock="Top" Text="{Binding FrameCountText}" Opacity="0.75" Margin="0,0,0,6" />
+            <TextBox Text="{Binding Prompt, UpdateSourceTrigger=PropertyChanged}"
+                     AcceptsReturn="True"
+                     AcceptsTab="False"
+                     TextWrapping="NoWrap"
+                     FontFamily="Consolas, Meiryo, monospace"
+                     VerticalScrollBarVisibility="Auto"
+                     HorizontalScrollBarVisibility="Auto" />
+        </DockPanel>
+
+        <!-- 送信前の注意（D-07） -->
+        <TextBlock Grid.Row="3"
+                   Text="{x:Static res:Strings.SendNotice}"
+                   TextWrapping="Wrap"
+                   Margin="0,12,0,0"
+                   Opacity="0.8" />
+
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
+            <Button Content="{x:Static res:Strings.Cancel}" IsCancel="True" />
+            <Button Content="{x:Static res:Strings.SendToClaude}" Click="OnSendClick" IsDefault="True" />
+        </StackPanel>
+    </Grid>
+</Window>

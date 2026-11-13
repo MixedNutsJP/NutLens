@@ -1,0 +1,91 @@
+<Project>
+
+  <!--
+    ADR-0010 決定 2：`dynamic` をビルドエラーにする。
+
+    `dynamic` は言語機能であり、.editorconfig や Roslyn アナライザの設定では止められない。
+    そこでコンパイル対象の .cs を正規表現で検査し、見つかったらビルドを失敗させる。
+
+    誤検出は許容する方向に倒している（禁止したいものを見逃すより安い）。
+    どうしても必要な行には `// NUTLENS-ALLOW-DYNAMIC` を付けて除外する。
+  -->
+
+  <UsingTask TaskName="NutLensForbidDynamicTask"
+             TaskFactory="RoslynCodeTaskFactory"
+             AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <SourceFiles ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
+      <Violations ParameterType="System.String" Output="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System" />
+      <Using Namespace="System.Collections.Generic" />
+      <Using Namespace="System.IO" />
+      <Using Namespace="System.Text" />
+      <Using Namespace="System.Text.RegularExpressions" />
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+          Regex pattern = new Regex(@"(?<![\w.])dynamic\b", RegexOptions.Compiled);
+          StringBuilder found = new StringBuilder();
+
+          foreach (Microsoft.Build.Framework.ITaskItem item in SourceFiles)
+          {
+              string path = item.GetMetadata("FullPath");
+              if (string.IsNullOrEmpty(path) || !File.Exists(path))
+              {
+                  continue;
+              }
+
+              // 生成コードは対象外（CsWin32 / XAML / AssemblyInfo など）
+              string normalized = path.Replace('/', '\\');
+              if (normalized.IndexOf("\\obj\\", StringComparison.OrdinalIgnoreCase) >= 0
+                  || normalized.EndsWith(".g.cs", StringComparison.OrdinalIgnoreCase)
+                  || normalized.EndsWith(".g.i.cs", StringComparison.OrdinalIgnoreCase)
+                  || normalized.EndsWith(".Designer.cs", StringComparison.OrdinalIgnoreCase))
+              {
+                  continue;
+              }
+
+              string[] lines = File.ReadAllLines(path);
+              for (int i = 0; i < lines.Length; i++)
+              {
+                  string line = lines[i];
+                  if (line.IndexOf("NUTLENS-ALLOW-DYNAMIC", StringComparison.Ordinal) >= 0)
+                  {
+                      continue;
+                  }
+
+                  // 行コメントを落としてから検査する（コメント中の「dynamic」は見逃す）
+                  int comment = line.IndexOf("//", StringComparison.Ordinal);
+                  string code = comment >= 0 ? line.Substring(0, comment) : line;
+                  string trimmed = code.TrimStart();
+                  if (trimmed.StartsWith("*", StringComparison.Ordinal))
+                  {
+                      continue;
+                  }
+
+                  if (pattern.IsMatch(code))
+                  {
+                      found.Append(path).Append('(').Append(i + 1).Append(')').Append("; ");
+                  }
+              }
+          }
+
+          Violations = found.ToString();
+        ]]>
+      </Code>
+    </Task>
+  </UsingTask>
+
+  <Target Name="NutLensForbidDynamic"
+          BeforeTargets="CoreCompile"
+          Condition="'$(NutLensSkipDynamicCheck)' != 'true' AND '@(Compile)' != ''">
+    <NutLensForbidDynamicTask SourceFiles="@(Compile)">
+      <Output TaskParameter="Violations" PropertyName="NutLensDynamicViolations" />
+    </NutLensForbidDynamicTask>
+    <Error Condition="'$(NutLensDynamicViolations)' != ''"
+           Code="NUTLENS0001"
+           Text="`dynamic` の使用は禁止されています（ADR-0010）。型を明示してください。必要な場合は該当行に // NUTLENS-ALLOW-DYNAMIC を付けてください。検出箇所: $(NutLensDynamicViolations)" />
+  </Target>
+
+</Project>

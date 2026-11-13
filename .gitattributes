@@ -1,0 +1,21 @@
+# 改行の扱いを 1 箇所に決める。
+# **これが無いと、環境ごとの core.autocrlf の設定で差分が丸ごと出る。**
+# 人によってファイル全体が「変更された」ことになり、本当の変更が読めなくなる。
+
+# 既定：リポジトリには LF で持ち、取り出すときは環境に合わせる。
+* text=auto
+
+# Windows の道具が読むものは CRLF で取り出す。
+*.ps1   text eol=crlf
+*.cmd   text eol=crlf
+*.bat   text eol=crlf
+*.iss   text eol=crlf
+*.sln   text eol=crlf
+*.slnx  text eol=crlf
+
+# 触らせない（中身を行で解釈しない）。
+*.ico   binary
+*.png   binary
+*.jpg   binary
+*.bin   binary
+*.pfx   binary

@@ -1,0 +1,88 @@
+name: 不具合の報告 / Bug report
+description: うまく動かないことを報告する / Report something that does not work
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **撮影した画像・音声は添付しないでください。** 一時データとして消える前提のものです。
+        **`claude.log` も貼らないでください**（プロンプトの内容が入っています）。
+
+        **Please do not attach captured images or audio**, and do not paste `claude.log`
+        (it contains the prompt).
+
+        セキュリティの問題は、Issue ではなく [Security Advisories](../../security/advisories/new) から
+        非公開でご報告ください。
+        For security issues, use [Security Advisories](../../security/advisories/new) instead.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: 何が起きましたか / What happened
+      description: 何をしようとして、何が起きたかを書いてください / What you tried, and what happened
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: どうなると思っていましたか / What you expected
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 再現の手順 / Steps to reproduce
+      placeholder: |
+        1.
+        2.
+        3.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: どのあたりの話ですか / Which part
+      options:
+        - 撮影 / Capture
+        - 解析（Claude Code） / Analysis
+        - 文字起こし・OCR / Transcription and OCR
+        - Web Detection（**未検証の機能です** / **not verified yet**）
+        - 履歴・設定 / History and settings
+        - ホットキー・トレイ / Hotkey and tray
+        - インストール・更新 / Install and update
+        - わからない / Not sure
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: NutLens の版 / NutLens version
+      description: 設定画面の「このアプリについて」に出ています / Shown in "このアプリについて"
+    validations:
+      required: true
+
+  - type: input
+    id: windows
+    attributes:
+      label: Windows の版 / Windows version
+      placeholder: "例 / e.g. Windows 11 24H2"
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: 環境の確認結果 / Environment probe
+      description: |
+        開発環境がある場合は、次の結果を貼ってください（**秘密情報は含まれません**）。
+        If you have a dev environment, paste the output of (it contains **no secrets**):
+
+        `dotnet run --project tools/NutLens.CaptureProbe -- --env`
+      render: text
+
+  - type: textarea
+    id: settings
+    attributes:
+      label: settings.json
+      description: |
+        `%LOCALAPPDATA%\NutLens\settings.json` の中身（**API キーは含まれません**）。
+        The contents of `%LOCALAPPDATA%\NutLens\settings.json` (**it never contains the API key**).
+      render: json

@@ -1,0 +1,171 @@
+name: Release
+
+# ADR-0031 決定 2：引き金はタグだけ。
+#
+# **手元でビルドしたものを Releases に上げない**（決定 1）。
+# 「急いでいるときに手元で作る」経路を残さないため、そもそも作らない。
+on:
+  push:
+    tags: [ 'v*' ]
+  workflow_dispatch:
+    # 手で回せるが、**公開はしない**（成果物を見るだけ）。
+    inputs:
+      version:
+        description: '版（公開はしません / not published）'
+        required: true
+        default: '0.0.0-test'
+
+permissions:
+  contents: write   # Releases へ上げるために要る
+
+jobs:
+  release:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
+        with:
+          fetch-depth: 0   # リリースノートにコミットを載せるため
+
+      - uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9  # v4
+        with:
+          dotnet-version: '10.0.x'
+
+      # ADR-0031 決定 3：版はタグから取る。コミットに版を書かない。
+      # 書くと「タグの版」と「コミットの版」がずれたときに、どちらが本物か分からなくなる。
+      - name: 版を決める / Resolve version
+        id: version
+        shell: bash
+        # **`${{ }}` を run の中に直接置かない。** 式は実行前に本文へ差し込まれるので、
+        # 入力に改行やシェルの記号が入ると、その場で別のコマンドとして走る。
+        # env 経由なら、シェルからは普通の変数にしか見えない。
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          if [ "$EVENT_NAME" = "push" ]; then
+            value="${GITHUB_REF_NAME#v}"
+          else
+            value="$INPUT_VERSION"
+          fi
+          echo "value=$value" >> "$GITHUB_OUTPUT"
+          echo "版 / version: $value"
+
+      # 配布に関わる値は build/Distribution.props だけが持つ（決定 7）。
+      - name: パッケージ ID を読む / Read package id
+        id: dist
+        shell: bash
+        run: |
+          id=$(grep -oP '(?<=<VelopackPackageId>)[^<]+' build/Distribution.props)
+          title=$(grep -oP '(?<=<VelopackPackageTitle>)[^<]+' build/Distribution.props)
+          echo "id=$id" >> "$GITHUB_OUTPUT"
+          echo "title=$title" >> "$GITHUB_OUTPUT"
+          echo "パッケージ ID / package id: $id"
+
+      - name: Test
+        run: dotnet test NutLens.slnx -c Release
+
+      - name: Publish
+        run: >
+          dotnet publish src/NutLens.App/NutLens.App.csproj
+          -c Release
+          -r win-x64
+          --self-contained false
+          -o publish
+          -p:Version=${{ steps.version.outputs.value }}
+
+      # ------------------------------------------------------------------
+      # 署名の段（いまは何もしない。ADR-0032 決定 1）
+      #
+      # 署名する場合は、ここに署名の処理を入れる。
+      # **位置は動かさない。** publish の後、vpk pack の前。
+      # 逆にすると、パッケージの中身を署名した後で再梱包することになり、署名が壊れる。
+      #
+      # 必要な資格情報は GitHub Actions のシークレットで渡す（D-14）。
+      # **ワークフローのファイルには書かない。**
+      #
+      # 署名するかどうかは決まっていない。CODE_SIGNING_POLICY.md を参照。
+      # ------------------------------------------------------------------
+
+      - name: vpk を入れる / Install vpk
+        run: dotnet tool install -g vpk
+
+      # --runtime を省くと **x86 として梱包される**（既定が x86。警告は出るが止まらない）。
+      # publish は win-x64 なので、食い違ったまま配ることになる。
+      # --framework は、.NET 10 デスクトップランタイムが無い PC で
+      # インストーラーに導入させるための指定（self-contained にしていないため）。
+      - name: Pack
+        run: >
+          vpk pack
+          --packId ${{ steps.dist.outputs.id }}
+          --packTitle "${{ steps.dist.outputs.title }}"
+          --packVersion ${{ steps.version.outputs.value }}
+          --packDir publish
+          --mainExe NutLens.exe
+          --outputDir release
+          --runtime win-x64
+          --framework net10.0-x64-desktop
+
+      # ADR-0035：インストール先を GUI で選べるようにする前段。
+      # Velopack の Setup.exe を包んで、--installto で渡すだけ。
+      # **ランナーに Inno Setup は入っていない。**
+      - name: Inno Setup を入れる / Install Inno Setup
+        run: choco install innosetup --no-progress -y
+
+      - name: 前段を包む / Wrap with Inno
+        shell: pwsh
+        run: |
+          $iscc = @(
+            "$env:LOCALAPPDATA\Programs\Inno Setup 6\ISCC.exe",
+            "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe",
+            "$env:ProgramFiles\Inno Setup 6\ISCC.exe"
+          ) | Where-Object { Test-Path $_ } | Select-Object -First 1
+          if (-not $iscc) { throw 'ISCC.exe が見つかりません' }
+
+          $setup = "release/${{ steps.dist.outputs.id }}-win-Setup.exe"
+          & $iscc /Q "/DAppVersion=${{ steps.version.outputs.value }}" `
+            "/DVelopackSetup=$(Resolve-Path $setup)" `
+            "/DOutputDir=$(Resolve-Path release)" `
+            installer/NutLens.iss
+          if ($LASTEXITCODE -ne 0) { throw 'ISCC に失敗' }
+
+          # **Velopack の Setup.exe は配らない**（ADR-0035 決定 5）。
+          # 「どっちを実行すればいいのか」を作らないため、包んだら消す。
+          Remove-Item $setup -Force
+
+      - name: 成果物を残す / Upload artifacts
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
+        with:
+          name: nutlens-${{ steps.version.outputs.value }}
+          path: release/
+
+      # workflow_dispatch では公開しない（成果物を見るだけ）。
+      - name: Release
+        if: github.event_name == 'push'
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65  # v2
+        with:
+          files: release/*
+          generate_release_notes: true
+          body: |
+            ## 署名について / About signing
+
+            **この配布物はコード署名されていません。** インストーラーを実行すると
+            Windows の SmartScreen が警告を出します。回避の手順と理由は
+            [CODE_SIGNING_POLICY.md](https://github.com/${{ github.repository }}/blob/main/CODE_SIGNING_POLICY.md)
+            にあります。
+
+            **This release is not code-signed**, so SmartScreen will warn you.
+            See [CODE_SIGNING_POLICY.md](https://github.com/${{ github.repository }}/blob/main/CODE_SIGNING_POLICY.md).
+
+            ## 出どころ / Provenance
+
+            - コミット / commit: `${{ github.sha }}`
+            - ビルド / build: [${{ github.run_id }}](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+            **リリースの成果物は GitHub Actions でしか作りません。**
+            **Release artifacts are only ever built by GitHub Actions.**
+
+            ## 入れ方 / How to install
+
+            `NutLens-Setup.exe` を実行してください。インストール先はその画面で選べます。
+            Run `NutLens-Setup.exe`; you can choose the install location in the wizard.
