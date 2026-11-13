@@ -120,6 +120,15 @@ owner / repo / 配布チャンネル / パッケージ ID。
 - `CODE_SIGNING_POLICY.md`
 - `.gitignore` に `dist/` `release/` を足す
 
+## 実装で分かったこと（2026-11-14）
+
+### `ci.yml` は初回 push で通った
+
+最初の push で CI が初めて走り、**`build`（windows-latest）と `docs` が両方成功**した。
+`docs` の「全 ADR が索引に載っているか」の検査も通っている。
+
+**`release.yml` は別物で、まだ一度も回していない。** タグを打つまで走らない。
+
 ## 宿題
 
 - **ワークフローを一度も回していない。** リポジトリが無いので回せない

@@ -1,6 +1,6 @@
 # ADR-0037. ADR は公開のまま維持者が書き、整合は `main` の保護で担保する
 
-- 状態: **採用**（2026-11-14。利用者が選択）
+- 状態: **実測・実機で確認**（2026-11-14。利用者が選択）
 - 日付: 2026-11-14
 - 関わる文書: `CONTRIBUTING.md` / `.github/pull_request_template.md` / `docs/adr/README.md`
 
@@ -134,13 +134,23 @@ PR を出そうにも、ベースにする `main` が無い。
 | ID | **27233358** |
 | 規則 | `pull_request`（承認 0）/ `non_fast_forward` / `deletion` |
 | バイパス者 | **なし** |
-| 状態 | **`disabled`**（最初の push の後に `active` へ） |
+| 状態 | **`active`**（最初の push の直後に切り替えた） |
 
-有効にするとき:
+**最初の push の直後に `active` へ切り替えた**（2026-11-14）。
 
 ```powershell
 gh api -X PUT repos/MixedNutsJP/NutLens/rulesets/27233358 -f enforcement=active
 ```
+
+**実際に弾かれることを確かめた。** 手元で 1 コミット作って push した結果:
+
+```
+remote: error: GH013: Repository rule violations found for refs/heads/main.
+remote: - Changes must be made through a pull request.
+ ! [remote rejected] main -> main (push declined due to repository rule violations)
+```
+
+確認用のコミットは `git reset --hard origin/main` で巻き戻した（リモートには残っていない）。
 
 ### 3. GitHub が既定で入れてくる規則が 1 つある
 
@@ -176,12 +186,14 @@ require_extra_approval_for_unattributed_changes: true
 最初の push で `.github/workflows/ci.yml` が `main` に載り、
 一度でも走って名前が確定してから足す。**それまでは入れない。**
 
+**最初の push で CI が初めて走り、`build` と `docs` がどちらも成功した**（2026-11-14）。
+名前が確定したので、同日に `required_status_checks` として足した。
+
 ## 宿題
 
-- **ルールセットを `active` にする**（最初の push の直後。**忘れるとこの ADR の決定 4 が効かない**）
-- **必須チェック（`build` / `docs`）の追加**。ワークフローが `main` で一度走ってから
-- **ルールセットの効き目を実際に確かめていない。** 直接 push が弾かれることを未確認
 - 第三者からの PR が実際に来たときの手触り（**事例が無い**）
+- **PR を実際に 1 本も通していない。** 直接 push が弾かれることは確かめたが、
+  **PR を作って必須チェックが効き、自分でマージできること**は未確認
 - GitHub がルールセットの既定に**新しい規則を足してくること**がある
   （実装で分かったこと 3）。**作りっぱなしにせず、たまに読み返す**
 
