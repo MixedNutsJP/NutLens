@@ -249,6 +249,8 @@ When you change it, you choose whether to bring the existing data along.
 | **自動更新** | **一度も更新していない** / **No update has ever been applied** |
 | アンインストール（履歴とモデルが残る） | **実機で確認** / **Checked** |
 | モデルのダウンロード | **実機で確認**（中断と再開は未検証） / **Checked** (resume not tested) |
+| CI（ビルドとテスト） | **実機で確認**（初回 push で `build` / `docs` とも成功） / **Checked** (both jobs passed on the first push) |
+| **リリースの自動化（タグ打ち）** | **一度も回していない** / **Never run** |
 
 **HDCP で保護された再生（一部の配信サービス）では、画面が黒く映ります。** これは Windows の
 仕様で、NutLens では回避できません。
