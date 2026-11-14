@@ -319,6 +319,36 @@ publish  →  ［署名の段］  →  vpk pack
 | `release.yml` | **タグ `v*` だけ** | テスト → publish →（署名の段）→ `vpk pack` → **Inno で前段を包む** → Releases |
 
 `workflow_dispatch` でも回せるが、**公開はしない**（成果物を見るだけ）。
+**一度も回していないワークフローでタグを打たない。** まず `workflow_dispatch` で
+全段を通し、成果物を見てからタグを打つ。
+
+### 9.1.1 prerelease の印（ADR-0039）
+
+**版の文字列から機械的に決める。人が選ばない。**
+
+```bash
+case "$value" in
+  *-*) prerelease=true ;;   # 1.0.0-rc.1 / 0.1.0-test など
+  0.*) prerelease=true ;;   # 0.x は安定版ではない（SemVer）
+  *)   prerelease=false ;;
+esac
+```
+
+**接尾辞の判定を先に置く。** 後にすると `1.0.0-rc.1` が
+「`0.` で始まらない」ので安定版として公開される。
+
+**同じ規則を更新確認も使う。**
+
+| 場所 | 使い方 |
+|---|---|
+| `release.yml` の `case` | 出す側。GitHub Releases の prerelease の印 |
+| `VersionStability.IsUnstable`（`NutLens.Core`） | 探す側。`GithubSource` に prerelease を探すか渡す |
+
+**片方だけ変えると壊れる。** prerelease として出しているのに安定版だけを探すと、
+**更新が一度も見つからない。しかも失敗しないので「最新です」と静かに返り続ける。**
+
+判定を `NutLens.Core` に置いたのは**単体テストで固めるため**
+（`NutLens.App` は `net10.0-windows` でテストから参照できない）。
 
 ### 9.2 `ci.yml` の文書の見張り
 

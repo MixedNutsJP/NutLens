@@ -30,11 +30,22 @@ and hands it to **your own Claude Code** to investigate.
 
 ## インストール / Installation
 
-[Releases](https://github.com/MixedNutsJP/NutLens/releases) から `Setup.exe` を落として実行します。
+[Releases](https://github.com/MixedNutsJP/NutLens/releases) から
+**`NutLens-Setup.exe`** を落として実行します。
 **管理者権限は要りません**（利用者ごとのインストールです）。
 
-Download `Setup.exe` from [Releases](https://github.com/MixedNutsJP/NutLens/releases) and run it.
+Download **`NutLens-Setup.exe`** from
+[Releases](https://github.com/MixedNutsJP/NutLens/releases) and run it.
 **No administrator rights are needed** (it installs per user).
+
+> **いまの版はすべて「Pre-release」です。**
+> `0.x` の間は prerelease として出します（[ADR-0039](docs/adr/0039-mark-zero-major-and-suffixed-versions-as-prerelease.md)）。
+> **`Latest` の札は付きません。** 一覧の一番上にあるものが最新です。
+> 確かめていないことが何かは、下の「動作確認の範囲」を読んでください。
+>
+> **Every release so far is a pre-release.** While the version is `0.x` it ships as a
+> pre-release, so **no `Latest` badge is shown** — the topmost entry is the newest.
+> See "What has been checked" below for what is not verified.
 
 インストーラーを使いたくない場合は、同じ Releases の**ポータブル版（zip）**も使えます。
 **ポータブル版では自動更新が効きません。**
@@ -250,7 +261,7 @@ When you change it, you choose whether to bring the existing data along.
 | アンインストール（履歴とモデルが残る） | **実機で確認** / **Checked** |
 | モデルのダウンロード | **実機で確認**（中断と再開は未検証） / **Checked** (resume not tested) |
 | CI（ビルドとテスト） | **実機で確認**（初回 push で `build` / `docs` とも成功） / **Checked** (both jobs passed on the first push) |
-| **リリースの自動化（タグ打ち）** | **一度も回していない** / **Never run** |
+| リリースの自動化（タグ打ち） | **実機で確認**（v0.1.0 を公開。`vpk` / Inno Setup / ISCC がランナーで動いた） / **Checked** |
 
 **HDCP で保護された再生（一部の配信サービス）では、画面が黒く映ります。** これは Windows の
 仕様で、NutLens では回避できません。

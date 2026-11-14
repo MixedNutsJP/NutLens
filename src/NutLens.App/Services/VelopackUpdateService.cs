@@ -148,7 +148,48 @@ public sealed class VelopackUpdateService : IUpdateService
     private UpdateManager GetManager()
     {
         // 更新元は GitHub Releases だけ。**端点は設定で変えない**（ADR-0028 影響）。
-        return this.manager ??= new UpdateManager(new GithubSource(RepositoryUrl(), null, false));
+        return this.manager ??= new UpdateManager(
+            new GithubSource(RepositoryUrl(), null, SearchesPrereleases()));
+    }
+
+    /// <summary>
+    /// prerelease も探すかどうか（ADR-0039 決定 3）。
+    ///
+    /// <para>
+    /// <b>ここを false に固定すると、0.x の間は更新が一度も見つからない。</b>
+    /// ADR-0039 で `0.x` と接尾辞つきの版は prerelease として公開するので、
+    /// <c>GithubSource</c> の既定（安定版だけを見る）では対象が 0 件になり、
+    /// **静かに「最新です」と出続ける**。失敗もしないので気づけない。
+    /// </para>
+    ///
+    /// <para>
+    /// いま動いている版に合わせる。0.x／接尾辞つきで動いているなら prerelease を追う。
+    /// 安定版で動いているなら安定版だけを追う（<b>1.0.0 の利用者に rc を出さない</b>）。
+    /// </para>
+    /// <para>
+    /// 判定そのものは <see cref="VersionStability.IsUnstable"/>（<c>NutLens.Core</c>）にある。
+    /// <b>ここに置くとテストから参照できない</b>（App は <c>net10.0-windows</c>、
+    /// テストは <c>net10.0</c>）。
+    /// </para>
+    /// </summary>
+    internal static bool SearchesPrereleases() =>
+        VersionStability.IsUnstable(CurrentInformationalVersion());
+
+    private static string CurrentInformationalVersion()
+    {
+        Assembly assembly = typeof(VelopackUpdateService).Assembly;
+
+        // InformationalVersion には "+<コミット>" が付くことがある。版の部分だけを見る。
+        string? informational = assembly
+            .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+
+        if (!string.IsNullOrWhiteSpace(informational))
+        {
+            int plus = informational.IndexOf('+', StringComparison.Ordinal);
+            return plus < 0 ? informational : informational[..plus];
+        }
+
+        return assembly.GetName().Version?.ToString() ?? string.Empty;
     }
 
     private static string RepositoryUrl()
