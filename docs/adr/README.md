@@ -59,6 +59,7 @@ NutLens のアーキテクチャ決定記録（Architecture Decision Record）�
 | [0036](0036-let-inno-launch-the-app-after-the-wizard-closes.md) | Velopack を `--silent` で呼び、アプリはウィザードを閉じるときに Inno が起こす | **実測・実機で確認**（起動のタイミングを利用者が確認） |
 | [0037](0037-keep-adrs-public-and-protect-main-instead-of-requiring-them.md) | ADR は公開のまま維持者が書き、整合は `main` の保護で担保する | **実測・実機で確認**（直接 push が `GH013` で弾かれることを確認。必須チェック `build` / `docs` も設定済み） |
 | [0038](0038-send-the-prompt-over-stdin-not-as-an-argument.md) | プロンプトは標準入力から渡し、コマンドラインに載せない | **実測・実機で確認**（危険な記号を含むプロンプトが実行されずに往復）。**npm 版（cmd 経由）は未検証** |
+| [0039](0039-mark-zero-major-and-suffixed-versions-as-prerelease.md) | `0.x` と接尾辞つきの版は prerelease として出し、更新確認も同じ規則で探す | 実装済み（判定は手元で 8 ケース＋単体テストで確認。**prerelease を実際に見つけて更新したことはない**） |
 
 ## 未処理の宿題
 
@@ -98,6 +99,7 @@ NutLens のアーキテクチャ決定記録（Architecture Decision Record）�
 | 0033 | **一度も移していない**（大きなモデルを含む移動の時間が未測定）。保存先を変えた状態での更新・アンインストールが未検証。多重起動時の扱い |
 | 0037 | **PR を 1 本も通していない**（直接 push が弾かれることは確認済み。PR の作成〜必須チェック〜自己マージは未検証）。第三者 PR の事例が無い |
 | 0038 | **npm 版（`claude.cmd`）で通ることが未検証**（この PC はネイティブ版のみ）。8191 文字を超えるプロンプトを流していない |
+| 0039 | **次の版を出すまでワークフローで試せない**（分岐は手元で確認済み）。`1.0.0` を出す条件は意図して未決 |
 | 0026 | **`ExceptionMessageMapper` は単体テストで守れない**（App は `net10.0-windows`、テストは `net10.0`）。**`NutLens.Core` に日本語の警告文が残っている**（決定 2 と食い違う。段階 5 の英語化で効く）。文言の見え方は未目視 |
 
 ### 片付いた宿題

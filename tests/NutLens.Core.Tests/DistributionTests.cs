@@ -379,4 +379,47 @@ public sealed class ClaudeUsabilityProbeTests
     {
         Assert.Equal(@"C:\bin\claude.exe", ClaudeUsabilityProbe.BuildStartInfo(Native).FileName);
     }
+
+    [Theory]
+
+    // 0.x は安定版ではない（SemVer）。
+    [InlineData("0.1.0", true)]
+    [InlineData("0.9.5", true)]
+    [InlineData("0.0.1", true)]
+    [InlineData("0", true)]
+
+    // 接尾辞があれば prerelease。**この判定が先に来ること**が要（1.0.0-rc.1）。
+    [InlineData("0.1.0-test", true)]
+    [InlineData("1.0.0-rc.1", true)]
+    [InlineData("1.0.0-alpha", true)]
+
+    // ここから安定版。
+    [InlineData("1.0.0", false)]
+    [InlineData("2.3.4", false)]
+
+    // **10. を 0. と混同しない。**
+    [InlineData("10.2.0", false)]
+    [InlineData("100.0.0", false)]
+    public void 版の安定性を判定する(string version, bool expected)
+    {
+        // ADR-0039 決定 1。release.yml の case と同じ規則でなければならない。
+        Assert.Equal(expected, VersionStability.IsUnstable(version));
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("   ")]
+    public void 版が読めなければprereleaseも探す(string? version)
+    {
+        // 取りこぼす（更新に気づけない）ほうが、余計に見つけるより困る。
+        Assert.True(VersionStability.IsUnstable(version));
+    }
+
+    [Fact]
+    public void 前後の空白があっても判定が変わらない()
+    {
+        Assert.True(VersionStability.IsUnstable(" 0.1.0 "));
+        Assert.False(VersionStability.IsUnstable(" 1.0.0 "));
+    }
 }

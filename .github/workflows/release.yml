@@ -48,8 +48,21 @@ jobs:
           else
             value="$INPUT_VERSION"
           fi
+
+          # ADR-0039：prerelease かどうかは版の文字列から機械的に決める。
+          # **人に選ばせない。** 選ばせると、急いでいるときに間違う。
+          #
+          # **接尾辞の判定を先に置く。** 後にすると 1.0.0-rc.1 が
+          # 「0. で始まらない」ので通常のリリースになってしまう。
+          case "$value" in
+            *-*) prerelease=true ;;   # 1.0.0-rc.1 / 0.1.0-test など
+            0.*) prerelease=true ;;   # 0.x は安定版ではない（SemVer）
+            *)   prerelease=false ;;  # 1.0.0 以降の、接尾辞なし
+          esac
+
           echo "value=$value" >> "$GITHUB_OUTPUT"
-          echo "版 / version: $value"
+          echo "prerelease=$prerelease" >> "$GITHUB_OUTPUT"
+          echo "版 / version: $value（prerelease: $prerelease）"
 
       # 配布に関わる値は build/Distribution.props だけが持つ（決定 7）。
       - name: パッケージ ID を読む / Read package id
@@ -146,6 +159,9 @@ jobs:
         with:
           files: release/*
           generate_release_notes: true
+
+          # ADR-0039：0.x と接尾辞つきの版は prerelease。判定は上の段で済んでいる。
+          prerelease: ${{ steps.version.outputs.prerelease }}
           body: |
             ## 署名について / About signing
 
